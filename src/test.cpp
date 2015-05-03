@@ -37,8 +37,8 @@ float t_ = 0.000001f;
 float eps_ = 10.0f*(float)sqrt((double)t_);
 
 //lecture des images
-  cv::Mat a = cv::imread("a.png", CV_LOAD_IMAGE_COLOR);
-  cv::Mat b = cv::imread("dog1.jpg", CV_LOAD_IMAGE_COLOR);
+cv::Mat a = cv::imread("a.png", CV_LOAD_IMAGE_COLOR);
+cv::Mat b = cv::imread("dog1.jpg", CV_LOAD_IMAGE_COLOR);
 float u = 25.0 ;
 
 /*
