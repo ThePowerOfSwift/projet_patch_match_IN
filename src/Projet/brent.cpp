@@ -54,7 +54,7 @@ float brent (cv::Mat *ImgSrc, cv::Mat *ImgTarget, float a, float b, float eps, f
 	//=====================================
   //c'est à dire MSE avec l'angle theta qui est ici la variable *x
 	double sq = sqrt(2);	
-	int taille2 = (1+sq)*taillePatch +1 ;
+	//int taille2 = (1+sq)*taillePatch +1 ;
 	cv::Mat patchSrc;
 	//sub_b(*ImgSrc, patchSrc, ax, ay, taille2);
 	patchSrc = sub_b_agrandir(*ImgSrc, ax, ay,10*taillePatch,sq*taillePatch);

@@ -13,6 +13,8 @@ libImg.a: $(OBJ)
 	rm -f libImg.a
 	ar ruc libImg.a $(OBJ)
 	ranlib libImg.a
+	mv *.o ../../build/
+	mv *.a ../../lib/
 
 clean: 
 	rm -f $(OBJ) core *.stackdump *.bak

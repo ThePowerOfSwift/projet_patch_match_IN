@@ -53,19 +53,19 @@ float distance_rotation(cv::Mat *patchSrc, cv::Mat *patchTarget, float *u, int a
 
 	cv::Size s = patchTarget->size();
 	int h = s.height;
-	int w = s.width;
+	//int w = s.width;
 
 	cv::Size s2 = patchSrc->size();
 	int h2= s2.height;
-	int w2 = s2.width;
+	//int w2 = s2.width;
 
 
 	cv::namedWindow( "patch target", CV_WINDOW_AUTOSIZE );// Create a window for display.
-    	cv::imshow( "patch target", *patchTarget );                   // Show our image inside it.
+    cv::imshow( "patch target", *patchTarget );                   // Show our image inside it.
 	cv::waitKey(20);
 
 	cv::namedWindow( "patch source", CV_WINDOW_AUTOSIZE );// Create a window for display.
-    	cv::imshow( "patch source", *patchSrc );                   // Show our image inside it.
+    cv::imshow( "patch source", *patchSrc );                   // Show our image inside it.
 	cv::waitKey(20);
 
 	
@@ -87,7 +87,7 @@ float distance_rotation(cv::Mat *patchSrc, cv::Mat *patchTarget, float *u, int a
 	cv::Mat patch_final = sub_b_coin(patch_rotate, x, x, h);
 	
 	cv::namedWindow( "patch final", CV_WINDOW_AUTOSIZE );// Create a window for display.
-    	cv::imshow( "patch final", patch_final );                   // Show our image inside it.
+    cv::imshow( "patch final", patch_final );                   // Show our image inside it.
 	cv::waitKey(20);
 
 	//Calculer l'erreur entre le patch rotaté et la cible

@@ -18,7 +18,7 @@
 #endif
 
 typedef unsigned char uchar;
-//const double M_PI = 3.14159265359;
+const double PI = 3.14159265359;
 
 #include "colorcode.h"
 
@@ -76,7 +76,7 @@ void computeColor(float fx, float fy, uchar *pix)
 	makecolorwheel();
 
     float rad = sqrt(fx * fx + fy * fy);
-    float a = atan2(-fy, -fx) / M_PI;
+    float a = atan2(-fy, -fx) / PI;
     float fk = (a + 1.0) / 2.0 * (ncols-1);
     int k0 = (int)fk;
     int k1 = (k0 + 1) % ncols;

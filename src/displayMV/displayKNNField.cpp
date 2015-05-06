@@ -4,11 +4,9 @@
 #include	<math.h>
 #include    <time.h>
 
-/*Non fournis*/
 #include "defineForPatchMatchApplication.h"
-/*Attente réponse OLM*/
 
-#include "imageLib/Image.h"
+#include "../imageLib/Image.h"
 #include "colorcode.h"
 
 void MotionToColor(CFloatImage motim, CByteImage &colim, float maxmotion)
@@ -132,4 +130,9 @@ void displayMotionField(generalizedAnnStruct *kNN, int sizeX, int sizeY, const c
   
    fclose(fp);
    free (buffer);   
-}	
+}
+
+int main()
+{
+	return 0;
+}

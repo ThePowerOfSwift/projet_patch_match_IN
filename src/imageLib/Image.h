@@ -32,14 +32,13 @@
 //
 ///////////////////////////////////////////////////////////////////////////
 
-
-namespace std {}
-using namespace std;
-
 #include <stdlib.h>
 #include <stdio.h>
 #include <string>
 #include "RefCntMem.h"
+
+namespace std {}
+using namespace std;
 
 #ifdef WIN32
 #include <typeinfo.h>

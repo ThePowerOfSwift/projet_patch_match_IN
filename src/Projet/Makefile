@@ -1,0 +1,32 @@
+CC=g++
+#-Werror //warning = erreur
+CFLAGS=-std=c++11 -O3 -L../../lib/ -lImg -lm -Winvalid-pch -Wall -W -Wno-uninitialized -pipe -march=native -ffast-math -fopenmp -rdynamic -O6 -s -ffast-math -fomit-frame-pointer -fstrength-reduce -msse2 -funroll-loops -D_REENTRANT -pthread -lopencv_core -lopencv_imgproc -lopencv_highgui
+LDFLAGS=$(pkg-config opencv --cflags --libs)
+EXEC=PatchMatch
+BUILD=../../build/
+
+all: $(EXEC)
+
+PatchMatch: $(BUILD)pm_minimal.o $(BUILD)distance_rotation.o $(BUILD)brent.o $(BUILD)BITMAP.o $(BUILD)MSE.o
+	$(CC) $(CFLAGS) -o ../../PatchMatch $(BUILD)pm_minimal.o $(BUILD)distance_rotation.o $(BUILD)brent.o $(BUILD)BITMAP.o $(BUILD)MSE.o $(LDFLAGS)
+	
+$(BUILD)pm_minimal.o: pm_minimal.cpp pm_minimal.h brent.h BITMAP.h
+	$(CC) $(CFLAGS) -o $(BUILD)pm_minimal.o -c pm_minimal.cpp 
+
+$(BUILD)distance_rotation.o: distance_rotation.cpp distance_rotation.h
+	$(CC) $(CFLAGS) -o $(BUILD)distance_rotation.o -c distance_rotation.cpp
+
+$(BUILD)brent.o: brent.cpp brent.h distance_rotation.h
+	$(CC) $(CFLAGS) -o $(BUILD)brent.o -c brent.cpp
+
+$(BUILD)BITMAP.o: BITMAP.cpp BITMAP.h
+	$(CC) $(CFLAGS) -o $(BUILD)BITMAP.o -c BITMAP.cpp
+
+$(BUILD)MSE.o: MSE.cpp MSE.h
+	$(CC) $(CFLAGS) -o $(BUILD)MSE.o -c MSE.cpp
+	
+clean:
+	rm -rf $(BUILD)*.o
+
+mrproper: clean
+	rm -rf $(EXEC)
