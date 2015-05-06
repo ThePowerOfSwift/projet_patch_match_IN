@@ -8,8 +8,8 @@ BUILD=build/
 
 all: $(EXEC)
 
-PatchMatch: $(BUILD)pm_minimal.o $(BUILD)distance_rotation.o $(BUILD)brent.o $(BUILD)BITMAP.o $(BUILD)MSE.o
-	$(CC) $(CFLAGS) -o PatchMatch $(BUILD)pm_minimal.o $(BUILD)distance_rotation.o $(BUILD)brent.o $(BUILD)BITMAP.o $(BUILD)MSE.o $(LDFLAGS)
+PatchMatch: $(BUILD)pm_minimal.o $(BUILD)distance_rotation.o $(BUILD)brent.o $(BUILD)BITMAP.o $(BUILD)MSE.o $(BUILD)colorcode.o $(BUILD)color_flow.o $(BUILD)displayKNNField.o $(BUILD)flowIO.o
+	$(CC) $(CFLAGS) -o PatchMatch $(BUILD)pm_minimal.o $(BUILD)distance_rotation.o $(BUILD)brent.o $(BUILD)BITMAP.o $(BUILD)MSE.o  $(BUILD)colorcode.o $(BUILD)color_flow.o $(BUILD)displayKNNField.o $(BUILD)flowIO.o $(LDFLAGS)
 
 $(BUILD)pm_minimal.o: $(SRC)pm_minimal.cpp $(SRC)pm_minimal.h $(SRC)brent.h $(SRC)BITMAP.h
 	$(CC) -o $(BUILD)pm_minimal.o -c $(SRC)pm_minimal.cpp $(CFLAGS)
@@ -26,6 +26,18 @@ $(BUILD)BITMAP.o: $(SRC)BITMAP.cpp $(SRC)BITMAP.h
 $(BUILD)MSE.o: $(SRC)MSE.cpp $(SRC)MSE.h
 	$(CC) -o $(BUILD)MSE.o -c $(SRC)MSE.cpp $(CFLAGS)
 
+$(BUILD)colorcode.o: $(SRC)colorcode.cpp $(SRC)colorcode.h
+	$(CC) -o $(BUILD)colorcode.o -c $(SRC)colorcode.cpp
+	
+$(BUILD)color_flow.o: $(SRC)color_flow.cpp
+	$(CC) -o $(BUILD)color_flow.o -c $(SRC)colorcode.cpp
+	
+$(BUILD)displayKNNField.o: $(SRC)displayKNNField.cpp $(SRC)displayKNNField.h
+	$(CC) -o $(BUILD)displayKNNField.o -c $(SRC)displayKNNField.cpp
+	
+$(BUILD)flowIO.o: $(SRC)flowIO.cpp $(SRC)flowIO.h
+	$(CC) -o $(BUILD)flowIO.o -c $(SRC)flowIO.cpp
+	
 clean:
 	rm -rf $(BUILD)*.o
 
