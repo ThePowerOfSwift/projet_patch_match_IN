@@ -6,6 +6,7 @@
 
 /*Non fournis*/
 #include "defineForPatchMatchApplication.h"
+/*Attente réponse OLM*/
 
 #include "imageLib/Image.h"
 #include "colorcode.h"
