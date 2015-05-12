@@ -25,6 +25,7 @@
 #include "pm_minimal.h"
 #include "brent.h"
 #include "BITMAP.h"
+#include "displayKNNField.h"
 
 using namespace cv;
 
@@ -81,6 +82,9 @@ void improve_guess(cv::Mat *a, cv::Mat *b, int ax, int ay, int &xbest, int &ybes
 /* Match image a to image b, returning the nearest neighbor field mapping a => b coords, stored in an RGB 24-bit image as (by<<12)|bx. */
 void patchmatch(cv::Mat *a, cv::Mat *b, cv::Mat *ann, cv::Mat *annd) {
   /* Initialize with random nearest neighbor field (NNF). */
+  
+  generalizedAnnStruct kNN[a->rows * a->cols];
+  
   ann = new cv::Mat_<int>(a->rows, a->cols);
   annd = new cv::Mat_<int>(a->rows, a->cols);
   int aew = a->cols - patch_w+1, aeh = a->rows - patch_w + 1;       /* Effective width and height (possible upper left corners of patches). */
@@ -138,7 +142,12 @@ void patchmatch(cv::Mat *a, cv::Mat *b, cv::Mat *ann, cv::Mat *annd) {
           int yp = ymin+rand()%(ymax-ymin);
           improve_guess(a, b, ax, ay, xbest, ybest, dbest, xp, yp);
         }
-
+        
+        char test[10] = "test.png\0";
+        kNN[xend * yend].dx[0] = xbest;
+        kNN[xend * yend].dy[0] = ybest;
+        displayMotionField(kNN, xend, yend, test, patch_w, 0);
+        
         ann->at<int>(ax,ay) = XY_TO_INT(xbest, ybest);
         annd->at<int>(ax,ay) = dbest;
       }
