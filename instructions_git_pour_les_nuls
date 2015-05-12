@@ -1,0 +1,8 @@
+1) si le dépôt n'est pas crée : git clone "adresse"
+
+Procédur à toujours suivre :
+
+2) git pull
+3) git add -A (ajouter tout les fichiers modifiés au commit)
+4) git commit (confirmation des modifications + message de commit IMPÉRATIF)
+5) git push
