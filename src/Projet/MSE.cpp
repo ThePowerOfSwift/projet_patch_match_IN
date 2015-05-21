@@ -1,4 +1,6 @@
 #include "MSE.h"
+#include <opencv2/core/core.hpp>
+#include <opencv2/highgui/highgui.hpp>
 
 void gaussianKernel(float kernel [][7]){
 	float mean = 3;

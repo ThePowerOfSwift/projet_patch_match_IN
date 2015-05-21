@@ -1,8 +1,8 @@
 #include "distance_rotation.h"
 #include "brent.h" 
-#include <visp/vpImage.h>
 #include <math.h>
 #include <opencv2/core/core.hpp>
+#include <opencv2/highgui/highgui.hpp>
 
 
 //*************************************************************

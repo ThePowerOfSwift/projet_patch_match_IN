@@ -1,8 +1,19 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <iostream>
+#include <climits>
+#include <algorithm>
+#include <opencv2/core/core.hpp>
+#include <opencv2/highgui/highgui.hpp>
 #include "knn.h"
+#include "MSE.h"
+
+const int k = 5;
 
 void k_improve_guess(cv::Mat *a, cv::Mat *b, int ax, int ay, int &xbest, int &ybest, int &kdbest, int bx, int by, bool &guess_ok) {
   
-  int d=dist(a,b,ax,ay);
+  int d=dist(a,b);
   if (d < kdbest) {
     guess_ok=true;
     kdbest=d;

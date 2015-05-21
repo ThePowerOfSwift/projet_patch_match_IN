@@ -39,13 +39,15 @@ using namespace cv;
 int patch_w  = 7;
 int pm_iters = 5;
 int rs_max   = INT_MAX;
-const int k = 5;
+
 //constantes pour le brent
 float a_brent = 0.0f;
 float b_brent = 180.0f;
 float t_brent = 0.000001f;
 float eps_brent = 10.0f*(float)sqrt((double)t_brent);
 float * x_brent =0;
+
+const int k = 5;
 
 #define XY_TO_INT(x, y) (((y)<<12)|(x))
 #define INT_TO_X(v) ((v)&((1<<12)-1))
@@ -103,11 +105,9 @@ void patchmatch(cv::Mat *a, cv::Mat *b, cv::Mat *ann, cv::Mat *annd,cv::Mat *knn
   
   generalizedAnnStruct kNN[a->rows * a->cols];
 
-  ann = new cv::Mat_<int>(a->rows, a->cols);
-  annd = new cv::Mat_<int>(a->rows, a->cols);
+ 
 
-  int aew = a->cols - patch_w+1, aeh = a->rows - patch_w + 1;       /* Effective width and height (possible upper left corners of patches). */
-  int bew = b->cols - patch_w+1, beh = b->rows - patch_w + 1;
+  
 
   memset(ann->data, 0, sizeof(int)*a->cols*a->rows);
   memset(annd->data, 0, sizeof(int)*a->cols*a->rows);
@@ -118,7 +118,8 @@ void patchmatch(cv::Mat *a, cv::Mat *b, cv::Mat *ann, cv::Mat *annd,cv::Mat *knn
       int by = rand()%beh;
       ann->at<int>(ay,ax) = XY_TO_INT(bx, by);
       //SEGFAULT/
-      annd->at<int>(ay,ax) = brent (a, b, a_brent, b_brent, eps_brent, t_brent, x_brent, ax, ay, bx, by, patch_w); 
+      annd->at<int>(ay,ax) = brent (a, b, a_brent, b_brent, eps_brent, t_brent, x_brent, ax, ay, bx, by, patch_w);
+      //FIN SEGFAULT/ 
     }
   }
 
@@ -142,10 +143,6 @@ void patchmatch(cv::Mat *a, cv::Mat *b, cv::Mat *ann, cv::Mat *annd,cv::Mat *knn
   for (int y = 0; y < aeh; y++) {
     for (int x = 0; x < aew; x++) {
       trier_voisins_init(knn,knnd,x,y);
-    }
-  }
-
-      //FIN SEGFAULT/
     }
   }
   
