@@ -7,8 +7,8 @@ BUILD=../../build/
 
 all: $(EXEC)
 
-PatchMatch: $(BUILD)pm_minimal.o $(BUILD)distance_rotation.o $(BUILD)brent.o $(BUILD)BITMAP.o $(BUILD)MSE.o $(BUILD)colorcode.o $(BUILD)displayKNNField.o $(BUILD)Image.o $(BUILD)RefCntMem.o
-	$(CC) $(CFLAGS) -o ../../PatchMatch $(BUILD)pm_minimal.o $(BUILD)distance_rotation.o $(BUILD)brent.o $(BUILD)BITMAP.o $(BUILD)MSE.o $(BUILD)colorcode.o $(BUILD)displayKNNField.o $(BUILD)Image.o $(BUILD)RefCntMem.o $(LDFLAGS)
+PatchMatch: $(BUILD)pm_minimal.o $(BUILD)distance_rotation.o $(BUILD)brent.o $(BUILD)BITMAP.o $(BUILD)MSE.o $(BUILD)knn.o $(BUILD)colorcode.o $(BUILD)displayKNNField.o $(BUILD)Image.o $(BUILD)RefCntMem.o
+	$(CC) $(CFLAGS) -o ../../PatchMatch $(BUILD)pm_minimal.o $(BUILD)distance_rotation.o $(BUILD)brent.o $(BUILD)BITMAP.o $(BUILD)MSE.o $(BUILD)knn.o $(BUILD)colorcode.o $(BUILD)displayKNNField.o $(BUILD)Image.o $(BUILD)RefCntMem.o $(LDFLAGS)
 
 $(BUILD)pm_minimal.o: pm_minimal.cpp pm_minimal.h brent.h BITMAP.h displayKNNField.h
 	$(CC) $(CFLAGS) -o $(BUILD)pm_minimal.o -c pm_minimal.cpp 
@@ -30,6 +30,9 @@ $(BUILD)colorcode.o: colorcode.cpp colorcode.h
 
 $(BUILD)displayKNNField.o: displayKNNField.cpp displayKNNField.h defineForPatchMatchApplication.h
 	$(CC) $(CFLAGS) -o $(BUILD)displayKNNField.o -c displayKNNField.cpp
+
+$(BUILD)knn.o: knn.cpp knn.h
+	$(CC) $(CFLAGS) -o $(BUILD)knn.o -c knn.cpp
 	
 clean:
 	rm -rf $(BUILD)*.o
