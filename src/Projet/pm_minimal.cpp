@@ -27,7 +27,11 @@
 #include "pm_minimal.h"
 #include "brent.h"
 #include "BITMAP.h"
+<<<<<<< HEAD
 #include "knn.h" 
+=======
+#include "displayKNNField.h"
+>>>>>>> d7cc6766ad819e9b466dae2e0d5e09887e011aa0
 
 using namespace cv;
 
@@ -74,6 +78,9 @@ void improve_guess(cv::Mat *a, cv::Mat *b, int ax, int ay, int &xbest, int &ybes
   //int d = dist(a, b, ax, ay, bx, by, dbest);
 
   int d = brent (a, b, a_brent, b_brent, eps_brent, t_brent, x_brent, ax, ay, bx, by, patch_w);
+  
+  std::cout << "improve_guess __BRENT d : " << d << std::endl;
+  
   if (d < dbest) {
     dbest = d;
     xbest = bx;
@@ -84,6 +91,7 @@ void improve_guess(cv::Mat *a, cv::Mat *b, int ax, int ay, int &xbest, int &ybes
 /* Match image a to image b, returning the nearest neighbor field mapping a => b coords, stored in an RGB 24-bit image as (by<<12)|bx. */
 void patchmatch(cv::Mat *a, cv::Mat *b, cv::Mat *ann, cv::Mat *annd,cv::Mat *knn, cv::Mat *knnd) {
   /* Initialize with random nearest neighbor field (NNF). */
+<<<<<<< HEAD
   ann = new cv::Mat_<float>(a->cols, a->rows);
   annd = new cv::Mat_<float>(a->cols, a->rows);
   knn = new cv::Mat_< cv::Vec<float, k> >(a->cols, a->rows);
@@ -96,13 +104,28 @@ void patchmatch(cv::Mat *a, cv::Mat *b, cv::Mat *ann, cv::Mat *annd,cv::Mat *knn
   memset(ann->data, 0, sizeof(int)*a->cols*a->rows);
   memset(annd->data, 0, sizeof(int)*a->cols*a->rows);
   */
+=======
+  
+  generalizedAnnStruct kNN[a->rows * a->cols];
+
+  ann = new cv::Mat_<int>(a->rows, a->cols);
+  annd = new cv::Mat_<int>(a->rows, a->cols);
+
+  int aew = a->cols - patch_w+1, aeh = a->rows - patch_w + 1;       /* Effective width and height (possible upper left corners of patches). */
+  int bew = b->cols - patch_w+1, beh = b->rows - patch_w + 1;
+
+  memset(ann->data, 0, sizeof(int)*a->cols*a->rows);
+  memset(annd->data, 0, sizeof(int)*a->cols*a->rows);
+>>>>>>> d7cc6766ad819e9b466dae2e0d5e09887e011aa0
 
   for (int ay = 0; ay < aeh; ay++) {
     for (int ax = 0; ax < aew; ax++) {
       int bx = rand()%bew;
       int by = rand()%beh;
       ann->at<int>(ay,ax) = XY_TO_INT(bx, by);
+      //SEGFAULT/
       annd->at<int>(ay,ax) = brent (a, b, a_brent, b_brent, eps_brent, t_brent, x_brent, ax, ay, bx, by, patch_w); 
+<<<<<<< HEAD
     }
   }
 
@@ -129,6 +152,12 @@ void patchmatch(cv::Mat *a, cv::Mat *b, cv::Mat *ann, cv::Mat *annd,cv::Mat *knn
     }
   }
 
+=======
+      //FIN SEGFAULT/
+    }
+  }
+  
+>>>>>>> d7cc6766ad819e9b466dae2e0d5e09887e011aa0
   for (int iter = 0; iter < pm_iters; iter++) {
     /* In each iteration, improve the NNF, by looping in scanline or reverse-scanline order. */
     int ystart = 0, yend = aeh, ychange = 1;
@@ -137,6 +166,7 @@ void patchmatch(cv::Mat *a, cv::Mat *b, cv::Mat *ann, cv::Mat *annd,cv::Mat *knn
       xstart = xend-1; xend = -1; xchange = -1;
       ystart = yend-1; yend = -1; ychange = -1;
     }
+    
     for (int ay = ystart; ay != yend; ay += ychange) {
       for (int ax = xstart; ax != xend; ax += xchange) { 
         /* Current (best) guess. */
@@ -182,7 +212,10 @@ void patchmatch(cv::Mat *a, cv::Mat *b, cv::Mat *ann, cv::Mat *annd,cv::Mat *knn
           k_improve_guess(a,b,ax,ay,xbest,ybest,kdbest,xp,yp,guess_ok);
 
         }
-
+        
+        kNN[xend * yend].dx[0] = xbest;
+        kNN[xend * yend].dy[0] = ybest;
+        
         ann->at<int>(ax,ay) = XY_TO_INT(xbest, ybest);
         annd->at<int>(ax,ay) = dbest;
 
@@ -225,8 +258,14 @@ void patchmatch(cv::Mat *a, cv::Mat *b, cv::Mat *ann, cv::Mat *annd,cv::Mat *knn
 
   cv::imwrite("results/ann.png", *ann);
   cv::imwrite("results/annd.png", *annd);
+<<<<<<< HEAD
   cv::imwrite("results/knn.png", *knn1);
   cv::imwrite("results/knnd.png", *knnd1);
+=======
+  
+  char test[10] = "test.png\0";
+  displayMotionField(kNN, aew, aeh, test, patch_w, 0);
+>>>>>>> d7cc6766ad819e9b466dae2e0d5e09887e011aa0
 }
 
 int main(int argc, char *argv[]) {

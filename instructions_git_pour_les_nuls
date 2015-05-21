@@ -1,4 +1,5 @@
-1) si le dépôt n'est pas crée : git clone "adresse"
+1) si le dépôt n'est pas crée : git clone https://github.com/pouloup/projet_patch_match_IN.git
+1 bis) suivre les indications de git, ie : git config --global user.email "mail" etc...
 
 Procédur à toujours suivre :
 

@@ -5,7 +5,6 @@
 #include    <time.h>
 
 #include "defineForPatchMatchApplication.h"
-
 #include "../imageLib/Image.h"
 #include "colorcode.h"
 
@@ -34,7 +33,7 @@ void MotionToColor(CFloatImage motim, CByteImage &colim, float maxmotion)
 	}
     }
     
-	//printf("max motion: %.4f  motion range: u = %.3f .. %.3f;  v = %.3f .. %.3f\n", maxrad, minx, maxx, miny, maxy);
+	printf("max motion: %.4f  motion range: u = %.3f .. %.3f;  v = %.3f .. %.3f\n", maxrad, minx, maxx, miny, maxy);
 
 
     if (maxmotion > 0) // i.e., specified on commandline
@@ -44,7 +43,7 @@ void MotionToColor(CFloatImage motim, CByteImage &colim, float maxmotion)
 	maxrad = 1;
 
     
-	//fprintf(stderr, "normalizing by %g\n", maxrad);
+	fprintf(stderr, "normalizing by %g\n", maxrad);
 
     for (y = 0; y < height; y++) {
 	for (x = 0; x < width; x++) {
@@ -130,9 +129,4 @@ void displayMotionField(generalizedAnnStruct *kNN, int sizeX, int sizeY, const c
   
    fclose(fp);
    free (buffer);   
-}
-
-int main()
-{
-	return 0;
 }

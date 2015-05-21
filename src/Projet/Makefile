@@ -7,10 +7,10 @@ BUILD=../../build/
 
 all: $(EXEC)
 
-PatchMatch: $(BUILD)pm_minimal.o $(BUILD)distance_rotation.o $(BUILD)brent.o $(BUILD)BITMAP.o $(BUILD)MSE.o
-	$(CC) $(CFLAGS) -o ../../PatchMatch $(BUILD)pm_minimal.o $(BUILD)distance_rotation.o $(BUILD)brent.o $(BUILD)BITMAP.o $(BUILD)MSE.o $(LDFLAGS)
-	
-$(BUILD)pm_minimal.o: pm_minimal.cpp pm_minimal.h brent.h BITMAP.h
+PatchMatch: $(BUILD)pm_minimal.o $(BUILD)distance_rotation.o $(BUILD)brent.o $(BUILD)BITMAP.o $(BUILD)MSE.o $(BUILD)colorcode.o $(BUILD)displayKNNField.o $(BUILD)Image.o $(BUILD)RefCntMem.o
+	$(CC) $(CFLAGS) -o ../../PatchMatch $(BUILD)pm_minimal.o $(BUILD)distance_rotation.o $(BUILD)brent.o $(BUILD)BITMAP.o $(BUILD)MSE.o $(BUILD)colorcode.o $(BUILD)displayKNNField.o $(BUILD)Image.o $(BUILD)RefCntMem.o $(LDFLAGS)
+
+$(BUILD)pm_minimal.o: pm_minimal.cpp pm_minimal.h brent.h BITMAP.h displayKNNField.h
 	$(CC) $(CFLAGS) -o $(BUILD)pm_minimal.o -c pm_minimal.cpp 
 
 $(BUILD)distance_rotation.o: distance_rotation.cpp distance_rotation.h
@@ -24,6 +24,12 @@ $(BUILD)BITMAP.o: BITMAP.cpp BITMAP.h
 
 $(BUILD)MSE.o: MSE.cpp MSE.h
 	$(CC) $(CFLAGS) -o $(BUILD)MSE.o -c MSE.cpp
+	
+$(BUILD)colorcode.o: colorcode.cpp colorcode.h
+	$(CC) $(CFLAGS) -o $(BUILD)colorcode.o -c colorcode.cpp
+
+$(BUILD)displayKNNField.o: displayKNNField.cpp displayKNNField.h defineForPatchMatchApplication.h
+	$(CC) $(CFLAGS) -o $(BUILD)displayKNNField.o -c displayKNNField.cpp
 	
 clean:
 	rm -rf $(BUILD)*.o
