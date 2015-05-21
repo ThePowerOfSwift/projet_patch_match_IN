@@ -19,12 +19,15 @@
 #include <stdlib.h>
 #include <string.h>
 #include <iostream>
+#include <climits>
+#include <algorithm>
 #include <opencv2/core/core.hpp>
 #include <opencv2/highgui/highgui.hpp>
 
 #include "pm_minimal.h"
 #include "brent.h"
 #include "BITMAP.h"
+#include "knn.h" 
 
 using namespace cv;
 
@@ -35,7 +38,7 @@ using namespace cv;
 int patch_w  = 7;
 int pm_iters = 5;
 int rs_max   = INT_MAX;
-
+const int k = 5;
 //constantes pour le brent
 float a_brent = 0.0f;
 float b_brent = 180.0f;
@@ -79,22 +82,53 @@ void improve_guess(cv::Mat *a, cv::Mat *b, int ax, int ay, int &xbest, int &ybes
 }
 
 /* Match image a to image b, returning the nearest neighbor field mapping a => b coords, stored in an RGB 24-bit image as (by<<12)|bx. */
-void patchmatch(cv::Mat *a, cv::Mat *b, cv::Mat *ann, cv::Mat *annd) {
+void patchmatch(cv::Mat *a, cv::Mat *b, cv::Mat *ann, cv::Mat *annd,cv::Mat *knn, cv::Mat *knnd) {
   /* Initialize with random nearest neighbor field (NNF). */
-  ann = new cv::Mat_<int>(a->rows, a->cols);
-  annd = new cv::Mat_<int>(a->rows, a->cols);
+  ann = new cv::Mat_<float>(a->cols, a->rows);
+  annd = new cv::Mat_<float>(a->cols, a->rows);
+  knn = new cv::Mat_< cv::Vec<float, k> >(a->cols, a->rows);
+  knnd = new cv::Mat_< cv::Vec<float, k> >(a->cols, a->rows);
+
   int aew = a->cols - patch_w+1, aeh = a->rows - patch_w + 1;       /* Effective width and height (possible upper left corners of patches). */
   int bew = b->cols - patch_w+1, beh = b->rows - patch_w + 1;
+  
+  /*
   memset(ann->data, 0, sizeof(int)*a->cols*a->rows);
   memset(annd->data, 0, sizeof(int)*a->cols*a->rows);
+  */
+
   for (int ay = 0; ay < aeh; ay++) {
     for (int ax = 0; ax < aew; ax++) {
       int bx = rand()%bew;
       int by = rand()%beh;
       ann->at<int>(ay,ax) = XY_TO_INT(bx, by);
       annd->at<int>(ay,ax) = brent (a, b, a_brent, b_brent, eps_brent, t_brent, x_brent, ax, ay, bx, by, patch_w); 
-}
+    }
   }
+
+  //initialisation de knn et knnd  
+  for (int ay = 0; ay < aeh; ay++) {
+    for (int ax = 0; ax < aew; ax++) {
+      (knn->at<cv::Vec<float, k> >(ay,ax))= cv::Vec<float, k>();
+      (knnd->at<cv::Vec<float, k> >(ay,ax))= cv::Vec<float, k>();
+
+      for (int i = 0; i < k; i++) {
+          int bx = rand()%bew;
+          int by = rand()%beh;
+
+          (knn->at<cv::Vec<float, k> >(ay,ax))[i]= XY_TO_INT(bx, by);
+          (knnd->at<cv::Vec<float, k> >(ay,ax))[i]= brent (a, b, a_brent, b_brent, eps_brent, t_brent, x_brent, ax, ay, bx, by, patch_w);
+      }      
+    }
+  }
+
+  //rangement des voisins
+  for (int y = 0; y < aeh; y++) {
+    for (int x = 0; x < aew; x++) {
+      trier_voisins_init(knn,knnd,x,y);
+    }
+  }
+
   for (int iter = 0; iter < pm_iters; iter++) {
     /* In each iteration, improve the NNF, by looping in scanline or reverse-scanline order. */
     int ystart = 0, yend = aeh, ychange = 1;
@@ -106,9 +140,13 @@ void patchmatch(cv::Mat *a, cv::Mat *b, cv::Mat *ann, cv::Mat *annd) {
     for (int ay = ystart; ay != yend; ay += ychange) {
       for (int ax = xstart; ax != xend; ax += xchange) { 
         /* Current (best) guess. */
-        int v = ann->at<int>(ay,ax);
+        int v = ann->at<float>(ay,ax);
         int xbest = INT_TO_X(v), ybest = INT_TO_Y(v);
-        int dbest = annd->at<int>(ay,ax);
+        v = (knn->at<cv::Vec<float, k> >(ay,ax))[k-1];//on récupère le moins intéressant de la liste des k voisin du pixel actuel
+        int kxbest = INT_TO_X(v), kybest = INT_TO_Y(v);
+        int dbest = annd->at<float>(ay,ax);
+        int kdbest = (knnd->at<cv::Vec<float, k> >(ay,ax))[k-1];//on récupère le moins intéressant de la liste des k voisin du pixel actuel
+        bool guess_ok=false;
 
         /* Propagation: Improve current guess by trying instead correspondences from left and above (below and right on odd iterations). */
         if ((unsigned) (ax - xchange) < (unsigned) aew) {
@@ -116,6 +154,8 @@ void patchmatch(cv::Mat *a, cv::Mat *b, cv::Mat *ann, cv::Mat *annd) {
           int xp = INT_TO_X(vp) + xchange, yp = INT_TO_Y(vp);
           if ((unsigned) xp < (unsigned) bew) {
             improve_guess(a, b, ax, ay, xbest, ybest, dbest, xp, yp);
+            k_improve_guess(a,b,ax,ay,xbest,ybest,kdbest,xp,yp,guess_ok);
+
           }
         }
 
@@ -124,6 +164,8 @@ void patchmatch(cv::Mat *a, cv::Mat *b, cv::Mat *ann, cv::Mat *annd) {
           int xp = INT_TO_X(vp), yp = INT_TO_Y(vp) + ychange;
           if ((unsigned) yp < (unsigned) beh) {
             improve_guess(a, b, ax, ay, xbest, ybest, dbest, xp, yp);
+            k_improve_guess(a,b,ax,ay,xbest,ybest,kdbest,xp,yp,guess_ok);
+
           }
         }
 
@@ -137,24 +179,54 @@ void patchmatch(cv::Mat *a, cv::Mat *b, cv::Mat *ann, cv::Mat *annd) {
           int xp = xmin+rand()%(xmax-xmin);
           int yp = ymin+rand()%(ymax-ymin);
           improve_guess(a, b, ax, ay, xbest, ybest, dbest, xp, yp);
+          k_improve_guess(a,b,ax,ay,xbest,ybest,kdbest,xp,yp,guess_ok);
+
         }
 
         ann->at<int>(ax,ay) = XY_TO_INT(xbest, ybest);
         annd->at<int>(ax,ay) = dbest;
+
+        if(guess_ok){
+          inserer_fin(ax,ay,kxbest,kybest,kdbest,knn,knnd);
+          trier_voisins(knn,knnd,ax,ay);
+        }
       }
     }
   }
+
+  //sauvegarde des meilleurs voisins
+  Mat * knn1 = new cv::Mat_< cv::Vec<float, k> >(a->cols, a->rows);;
+  Mat * knnd1 = new cv::Mat_< cv::Vec<float, k> >(a->cols, a->rows);;
+
+  for (int ay = 0; ay < aeh; ay++) {
+    for (int ax = 0; ax < aew; ax++) {
+      (knn1->at<cv::Vec<float, k> >(ay,ax))= (knn->at<cv::Vec<float, k> >(ay,ax))[0];
+      (knnd1->at<cv::Vec<float, k> >(ay,ax))= (knnd->at<cv::Vec<float, k> >(ay,ax))[0];
+    }
+  }
+
+
   printf("Saving output images\n");
   BITMAP *test1 = matToBITMAP(*annd);
   BITMAP *test2 = matToBITMAP(*ann);
+  BITMAP *test3 = matToBITMAP(*knnd1);
+  BITMAP *test4 = matToBITMAP(*knn1);
 
   save_bitmap(test1, "results/anndTEST.jpg");
   save_bitmap(test2, "results/annTEST.jpg");
+  save_bitmap(test3, "results/knndTEST.jpg");
+  save_bitmap(test4, "results/knnTEST.jpg");
+
   delete test1;
   delete test2;
+  delete test3;
+  delete test4;
+
 
   cv::imwrite("results/ann.png", *ann);
   cv::imwrite("results/annd.png", *annd);
+  cv::imwrite("results/knn.png", *knn1);
+  cv::imwrite("results/knnd.png", *knnd1);
 }
 
 int main(int argc, char *argv[]) {
@@ -170,13 +242,15 @@ int main(int argc, char *argv[]) {
   Mat a = BITMAPToMat(aa);
   Mat b = BITMAPToMat(bb);
 
-  Mat *ann = NULL, *annd = NULL;
+  Mat *ann = NULL, *annd = NULL, *knn = NULL, *knnd = NULL;
 
   printf("Running PatchMatch\n");
-  patchmatch(&a, &b, ann, annd);
+  patchmatch(&a, &b, ann, annd, knn, knnd);
 
   delete ann;
   delete annd;
+  delete knn;
+  delete knnd;
 
   return 0;
 }
