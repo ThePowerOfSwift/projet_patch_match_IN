@@ -1,8 +1,8 @@
 #include "distance_rotation.h"
 #include "brent.h" 
+#include <visp/vpImage.h>
 #include <math.h>
 #include <opencv2/core/core.hpp>
-#include <opencv2/highgui/highgui.hpp>
 
 
 //*************************************************************
@@ -57,17 +57,17 @@ float brent (cv::Mat *ImgSrc, cv::Mat *ImgTarget, float a, float b, float eps, f
 	int taille2 = sq*taillePatch  ;
 
 
-	cv::Mat patchSrc = sub_milieu(*ImgSrc, ax+taillePatch/2+1 ,ay+taillePatch/2+1 ,taille2);
+	cv::Mat patchSrc = sub_milieu(*ImgSrc, ax+10*taillePatch/2+1 ,ay+10*taillePatch/2+1 ,10*taille2);
 	
 	/*
 	cv::namedWindow( "a envoyer", CV_WINDOW_AUTOSIZE );// Create a window for display.
    cv::imshow( "a envoyer", patchSrc  );      */
 
 	cv::Mat patchTarget;
-	patchTarget = sub(*ImgTarget, bx, by,taillePatch);
+	patchTarget = sub(*ImgTarget, bx, by,10*taillePatch);
 
  	fx = distance_rotation(&patchSrc, &patchTarget, x, ax, ay, bx, by); //*x =angle de rotation
-  //=================================================================
+     //=================================================================
 
     
   fw = fx;
@@ -165,14 +165,14 @@ float brent (cv::Mat *ImgSrc, cv::Mat *ImgTarget, float a, float b, float eps, f
      // METTRE CODE ICI
      //c'est à dire MSE avec l'angle theta qui est ici la variable u
 
-		cv::Mat patchSrc2 = sub_milieu(*ImgSrc, ax+taillePatch/2+1 ,ay+taillePatch/2+1 ,taille2);
+		cv::Mat patchSrc2 = sub_milieu(*ImgSrc, ax+10*taillePatch/2+1 ,ay+10*taillePatch/2+1 ,10*taille2);
 	
 		/*
 		cv::namedWindow( "a envoyer", CV_WINDOW_AUTOSIZE );// Create a window for display.
 		cv::imshow( "a envoyer", patchSrc  );      */
 
 		cv::Mat patchTarget2;
-		patchTarget2 = sub(*ImgTarget, bx, by,taillePatch);
+		patchTarget2 = sub(*ImgTarget, bx, by,10*taillePatch);
 
 	 	fu = distance_rotation(&patchSrc2, &patchTarget2, &u, ax, ay, bx, by); //*x =angle de rotation
      //=================================================================

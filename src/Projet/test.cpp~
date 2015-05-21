@@ -1,0 +1,56 @@
+
+#include "distance_rotation.h"
+#include "brent.h"
+#include <opencv2/core/core.hpp>
+#include <opencv2/highgui/highgui.hpp>
+
+//TEST DISTANCE ROTATION
+/*
+int main(int argc, char *argv[]) {
+//lecture des images
+  cv::Mat a = cv::imread("a.png", CV_LOAD_IMAGE_COLOR);
+  cv::Mat b = cv::imread("dog1.jpg", CV_LOAD_IMAGE_COLOR);
+float u = 25.0 ;
+
+
+ 	cv::namedWindow( "patch source avant", CV_WINDOW_AUTOSIZE );// Create a window for display.
+    	cv::imshow( "patch source avant", a );                   // Show our image inside it.
+	cv::waitKey(20);
+
+//test de distance rotation
+std::cout << "erreur = " << distance_rotation(&a, &b, &u,0,0,0,0) << std::endl ;
+//std::cout << "erreur = " << distance_rotation(&a_float, &b_float, &u,0,0,0,0) << std::endl ;
+cv::waitKey();
+return 0 ;
+}
+
+*/
+
+//TEST BRENT
+
+int main(int argc, char *argv[]) {
+
+
+float a_ = 0.0f;
+float b_ = 180.0f;
+float t_ = 0.000001f;
+float eps_ = 10.0f*(float)sqrt((double)t_);
+
+//lecture des images
+cv::Mat a = cv::imread("a.png", CV_LOAD_IMAGE_COLOR);
+cv::Mat b = cv::imread("dog1.jpg", CV_LOAD_IMAGE_COLOR);
+float u = 25.0 ;
+
+/*
+ cv::namedWindow( "patch source avant", CV_WINDOW_AUTOSIZE );// Create a window for display.
+    	cv::imshow( "patch source avant", a );                   // Show our image inside it.
+	cv::waitKey(20);
+*/
+//test de distance rotation
+std::cout << "erreur = " << brent(&a, &b,a_ ,b_ ,eps_ , t_ , &u ,0,0,0,0,7) << std::endl ;
+
+
+cv::waitKey();
+return 0 ;
+}
+

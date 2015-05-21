@@ -12,5 +12,5 @@
 #endif
 
 void gaussianKernel(float kernel [][7]);
-float dist( cv::Mat *a, cv::Mat *b, int cutoff=INT_MAX);
+float dist ( cv::Mat *a, cv::Mat *b, int cutoff=INT_MAX);
 
