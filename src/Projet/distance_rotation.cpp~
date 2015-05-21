@@ -65,7 +65,7 @@ float distance_rotation(cv::Mat *patchSrc, cv::Mat *patchTarget, float *u, int a
 	cv::waitKey(20);
 
 	//Calculer l'erreur entre le patch rotaté et la cible
-	float erreur = dist(&patch_final, patchTarget);
+	float erreur = dist(&patch_final, patchTarget,1000);
 	//delete patch_rotate;
 
 	return erreur;
