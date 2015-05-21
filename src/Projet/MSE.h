@@ -4,6 +4,7 @@
 #include <math.h>
 #include <cmath>
 #include <climits>
+#include <iostream>
 
 #ifndef MAX
 #define MAX(a, b) ((a)>(b)?(a):(b))
@@ -11,5 +12,5 @@
 #endif
 
 void gaussianKernel(float kernel [][7]);
-float dist ( cv::Mat *a, cv::Mat *b, int ax, int ay, int bx, int by, int cutoff=INT_MAX);
+float dist ( cv::Mat *a, cv::Mat *b, int cutoff=INT_MAX);
 
