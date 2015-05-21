@@ -6,34 +6,6 @@
 
 
 //////////////////////////////////////////////////////     Rotation            /////////////////////////////////////////////////////////////////////////////
-/*
-void Rotation(cv::Mat *I, cv::Mat &D, float *alpha)
-{
-	cv::Size sz = I->size();
-	int h = sz.height;
-	int w = sz.width;
-	//int h = I->getHeight();
-	//int w = I->getWidth();
-	float m1 = h/2;
-	float m2 = w/2;
-	float c = cos(*alpha);
-	float s = sin(*alpha);
-
-		for(int i = 0 ;  i<h; i++)
-			for(int j = 0; j<w;j++)
-			{
-
-				float a = 0.0;
-				float b = 0;
-
-				a = (c*(i - m1) - s*(j - m2)) +m1;
-				b = (s*(i - m1) + c*(j - m2)) +m2;
-				//D[(int)(a+m1)][(int)(b+m2)] = (*I)[i][j];
-				D.at<float>((int)(a+m1),(int)(b+m2)) = I->at<float>(i,j);
-			}
-}
-
-*/
 
 void Rotation(cv::Mat& src, cv::Mat& dst, double angle)
 {
@@ -53,21 +25,21 @@ float distance_rotation(cv::Mat *patchSrc, cv::Mat *patchTarget, float *u, int a
 
 	cv::Size s = patchTarget->size();
 	int h = s.height;
-	//int w = s.width;
+	int w = s.width;
 
 	cv::Size s2 = patchSrc->size();
 	int h2= s2.height;
-	//int w2 = s2.width;
+	int w2 = s2.width;
 
-
-	cv::namedWindow( "patch target", CV_WINDOW_AUTOSIZE );// Create a window for display.
-    cv::imshow( "patch target", *patchTarget );                   // Show our image inside it.
+/*
+	cv::namedWindow( "target", CV_WINDOW_AUTOSIZE );// Create a window for display.
+    	cv::imshow( "target", *patchTarget );                   // Show our image inside it.
 	cv::waitKey(20);
 
-	cv::namedWindow( "patch source", CV_WINDOW_AUTOSIZE );// Create a window for display.
-    cv::imshow( "patch source", *patchSrc );                   // Show our image inside it.
+	cv::namedWindow( "source", CV_WINDOW_AUTOSIZE );// Create a window for display.
+    	cv::imshow( "source", *patchSrc );                   // Show our image inside it.
 	cv::waitKey(20);
-
+*/
 	
 	// envoyer dans patch_rotate la rotation de patchSrc d'un angle u
 	 cv::Mat patch_rotate ;
@@ -75,86 +47,206 @@ float distance_rotation(cv::Mat *patchSrc, cv::Mat *patchTarget, float *u, int a
  	 Rotation(*patchSrc, patch_rotate, *u);
 	
 	//cv::imwrite("patch_rotate.jpg", patch_rotate);	
-	
+	/*
 
-	cv::namedWindow( "patch source rotate", CV_WINDOW_AUTOSIZE );// Create a window for display.
-    	cv::imshow( "patch source rotate", patch_rotate );                   // Show our image inside it.
+	cv::namedWindow( "rotate", CV_WINDOW_AUTOSIZE );// Create a window for display.
+    	cv::imshow( "rotate", patch_rotate );                   // Show our image inside it.
 	cv::waitKey(20);
-
+*/
 
 	
-	int x = h2/2 - h ;
-	cv::Mat patch_final = sub_b_coin(patch_rotate, x, x, h);
-	
+	int x = h2/2 ;
+	//cv::Mat patch_final = sub(patch_rotate, x, x, h);
+	cv::Mat patch_final = sub_milieu(patch_rotate, x, x, h);
 	cv::namedWindow( "patch final", CV_WINDOW_AUTOSIZE );// Create a window for display.
-    cv::imshow( "patch final", patch_final );                   // Show our image inside it.
+    	cv::imshow( "patch final", patch_final );                   // Show our image inside it.
 	cv::waitKey(20);
 
 	//Calculer l'erreur entre le patch rotaté et la cible
-	float erreur =  1.0; //dist(&patch_rotate, patchTarget, ax, ay, bx, by);
+	float erreur = 0; // dist(&patch_final, patchTarget, ax, ay, bx, by);
 
 	//delete patch_rotate;
 
 	return erreur;
 }
 
-cv::Mat sub_b_coin(cv::Mat src, int x, int y, int size)
-{
-	if(x>0 && y>0 && x < (src.cols) &&  y < (src.rows))
-	{	
-		cv::Mat t = src(cv::Range::all(), cv::Range(x, x+size));
-		return t(cv::Range(y,y+size), cv::Range::all());
-	}
 
-	else
+
+
+
+
+//soustrait un patch de taille size dans le sens diagonal et dont le coin en haut a gauche est (x,y)
+cv::Mat sub(cv::Mat I, int x, int y, int size)
+{
+
+	int h = I.rows ;
+	int w = I.cols ;
+
+
+	int i = y;
+	int j = x;
+
+
+	if(x>=0 && y>=0)
 	{
-		std::cout << "erreur lors de la création du patch" << std::endl ;
-		return src ;
-	}
-}
-
-
-
-cv::Mat sub_b_agrandir(cv::Mat src, int x, int y, int size, int agrandir)
-{
-
-	int droite = src.cols;
-	int bas = src.rows;
-	cv::Mat t_a ;
-	int k1=0;
-	int k2 = 0 ;
-		for (int i = x-agrandir/2 ; i<size+agrandir/2+x; i++)
+		if(x < (I.cols) &&  y < (I.rows))
 		{
-			for (int j = y-agrandir/2; j<size+agrandir/2+y; j++)
-			{
-				std::cout << "k1 = " << k1 << " k2 = " << k2 << std::endl ; 
-				std::cout << "i = " << i << " j = " << j << std::endl ; 
-				if(i<bas && j<droite)
-				{			
-					std::cout << "here 1 !!" << std::endl;
-					if(i<0 && j<0) { std::cout << "here 2 !!" << std::endl;t_a.at<float>(k1,k2) = src.at<float>(0,0) ; }
-					else if(i>0 && j<0) {t_a.at<float>(k1,k2) = src.at<float>(i,0) ; std::cout << "here 22 !!" << std::endl;}
-					else if(i<0 && j>0) {t_a.at<float>(k1,k2) = src.at<float>(0,j) ; std::cout << "here 3 !!" << std::endl;}
-					else {t_a.at<float>(k1,k2) = src.at<float>(i,j) ; std::cout << "here 4 !!" << std::endl;}
-				}
-				else
-				{
-					
-					if(i>bas && j>droite) {t_a.at<float>(k1,k2) = src.at<float>(bas-1,droite-1) ;}
-					else if(i>bas && j<droite) {t_a.at<float>(k1,k2) = src.at<float>(i,droite-1) ;}
-					else if(i<bas && j>droite) {t_a.at<float>(k1,k2) = src.at<float>(bas-1,j) ;}
-					else {t_a.at<float>(i,j) = src.at<float>(k1,k2) ;}	
-				}
-			k2 ++ ;
+			if(x+size < I.cols && y+size < I.rows)
+			{//patch contenu dans l'image
+				cv::Mat t = I(cv::Range::all(), cv::Range(x, x+size));
+			//	std::cout << "patch dans l'image " << std::endl ;
+		
+				return t(cv::Range(y,y+size), cv::Range::all());
 			}
-		k1++;
+
+			else 
+			{	
+				cv::Mat tI = I(cv::Range::all(), cv::Range(0, size));
+				cv:: Mat t = tI(cv::Range(0,size), cv::Range::all());
+				//std::cout << "patch qui depasse - cas 1" << std::endl ;
+				//patch qui dépasse de l'image a droite ou vers le bas
+				//copier la partie contenue
+				for(int k1=y; k1<I.rows;k1++)
+				{
+					for(int k2=x; k2<I.cols;k2++)
+					{
+						t.at<int>(k1-y,k2-x) = I.at<int>(k1,k2);	
+					}
+				}			
+				//remplir la partie qui dépasse
+				int d1 = size - (I.rows-x);
+				int d2 = size - (I.cols-y);
+
+				for(int k1=0; k1<d1;k1++)
+				{
+					for(int k2=0; k2<d2;k2++)
+					{
+						//std::cout << "partie qui depasse" << std::endl ;
+						t.at<int>(I.rows-x+k1, I.cols-y+k2) =0;// I.at<float>(0,0);	
+					}
+				}	
+	
+				return t ;
+			}
+		}
+		else 
+		{ 
+			std::cout << "erreur lors de la création du patch" << std::endl ; 
+			return I;
 		}
 
-return t_a ;
+		
+	}
+	else 
+	{
+		//std::cout << "patch qui depasse - cas 2" << std::endl ;
+		
+		cv::Mat t;
+	 	I.copyTo(t);
+
+		//patch qui dépasse de l'image a gauche ou vers le haut
+		//copier la partie contenue
+
+		for(int k1=-y; k1< size;k1++)
+		{
+			for(int k2=-x; k2<size;k2++)
+			{
+				t.at<int>(k1,k2) = I.at<int>(k1+y,k2+x);	
+			}
+		}			
+		cv::Mat t2 = t(cv::Range::all(), cv::Range(0, size));
+		return t2(cv::Range(0,size), cv::Range::all());
+	 
+	}
+
+	
+
 }
 
 
-	
+
+
+//soustrait un patch de taille size dans tous les sens dont le milieu est (x,y)
+
+cv::Mat sub_milieu(cv::Mat I, int x, int y, int size)
+{
+int m = size/2;
+
+	if(x>=0 && y>=0 && x < (I.cols) &&  y < (I.rows))
+	{
+		if(x-m >= 0 && y-m >= 0 && x+m < I.cols && y+m < I.rows)
+		{ 
+			//std::cout << "cas 1" << std::endl ;
+			//patch dans l'image
+			cv::Mat t2 = I(cv::Range::all(), cv::Range(x-m, x+m));
+			return t2(cv::Range(y-m, y+m), cv::Range::all());
+		}	
+		else
+		{
+			//patch qui dépasse vers la gauche ou le haut
+			if(x+m < I.cols && y+m < I.rows)
+			{
+			//	std::cout << " cas 2" << std::endl ;
+				//copie de la partie contenue dans l'image
+				cv::Mat t = I(cv::Range::all(), cv::Range(0, m+x));
+				cv::Mat t2 = t(cv::Range(0, y+m), cv::Range::all());
+
+				//remplissage du reste
+				cv::Mat t3;
+	 			I.copyTo(t3);
+
+				//patch qui dépasse de l'image a gauche ou vers le haut
+				//copier la partie contenue
+
+				for(int k1=0; k1< t2.rows;k1++)
+				{
+					for(int k2=0; k2<t2.cols;k2++)
+					{
+						t3.at<int>(k1+m-y,k2+m-x) = t2.at<int>(k1,k2);	
+					}
+				}			
+				cv::Mat t4 = t3(cv::Range::all(), cv::Range(0, size));
+				return t4(cv::Range(0,size), cv::Range::all());
+				
+			}			
+
+			//patch qui dépasse vers la droite ou le bas
+			else
+			{
+			//	std::cout << "cas 3" << std::endl ;
+				//copie de la partie contenue dans l'image
+				cv::Mat t = I(cv::Range::all(), cv::Range(x-m, I.cols));
+				cv::Mat t2 = t(cv::Range(y-m, I.rows), cv::Range::all());
+
+				//remplissage du reste
+				cv::Mat t3;
+	 			I.copyTo(t3);
+
+				//copier la partie contenue
+
+				for(int k1=0; k1< t2.rows;k1++)
+				{
+					for(int k2=0; k2<t2.cols;k2++)
+					{
+						t3.at<int>(k1,k2) = t2.at<int>(k1,k2);	
+					}
+				}			
+				cv::Mat t4 = t3(cv::Range::all(), cv::Range(0, size));
+				return t4(cv::Range(0,size), cv::Range::all());
+				
+			}			
+		}
+	}
+
+	else {std::cout << "coordonées de x et y non valides" << std::endl ; return I;}
+}
+
+
+
+
+
+
+
 
 
 

@@ -54,18 +54,17 @@ float brent (cv::Mat *ImgSrc, cv::Mat *ImgTarget, float a, float b, float eps, f
 	//=====================================
   //c'est à dire MSE avec l'angle theta qui est ici la variable *x
 	double sq = sqrt(2);	
-	//int taille2 = (1+sq)*taillePatch +1 ;
-	cv::Mat patchSrc;
-	//sub_b(*ImgSrc, patchSrc, ax, ay, taille2);
-	patchSrc = sub_b_agrandir(*ImgSrc, ax, ay,10*taillePatch,sq*taillePatch);
-		
+	int taille2 = sq*taillePatch  ;
+
+
+	cv::Mat patchSrc = sub_milieu(*ImgSrc, ax+10*taillePatch/2+1 ,ay+10*taillePatch/2+1 ,10*taille2);
+	
+	/*
+	cv::namedWindow( "a envoyer", CV_WINDOW_AUTOSIZE );// Create a window for display.
+   cv::imshow( "a envoyer", patchSrc  );      */
+
 	cv::Mat patchTarget;
-	//sub_b(*ImgTarget, patchTarget, bx, by, taillePatch);
-	patchTarget = sub_b_coin(*ImgTarget, bx, by,10*taillePatch);
-
-
- 	
-
+	patchTarget = sub(*ImgTarget, bx, by,10*taillePatch);
 
  	fx = distance_rotation(&patchSrc, &patchTarget, x, ax, ay, bx, by); //*x =angle de rotation
      //=================================================================
@@ -165,7 +164,17 @@ float brent (cv::Mat *ImgSrc, cv::Mat *ImgTarget, float a, float b, float eps, f
      //=================================================================
      // METTRE CODE ICI
      //c'est à dire MSE avec l'angle theta qui est ici la variable u
-    // fu = distance_rotation(&patchSrc,&patchTarget, &u, ax, ay, bx, by); //u =angle de rotation
+
+		cv::Mat patchSrc2 = sub_milieu(*ImgSrc, ax+10*taillePatch/2+1 ,ay+10*taillePatch/2+1 ,10*taille2);
+	
+		/*
+		cv::namedWindow( "a envoyer", CV_WINDOW_AUTOSIZE );// Create a window for display.
+		cv::imshow( "a envoyer", patchSrc  );      */
+
+		cv::Mat patchTarget2;
+		patchTarget2 = sub(*ImgTarget, bx, by,10*taillePatch);
+
+	 	fu = distance_rotation(&patchSrc2, &patchTarget2, &u, ax, ay, bx, by); //*x =angle de rotation
      //=================================================================
 //
 //  Update A, B, V, W, and X.
