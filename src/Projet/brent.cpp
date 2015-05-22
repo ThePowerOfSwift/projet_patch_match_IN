@@ -41,28 +41,23 @@ float brent (cv::Mat *ImgSrc, cv::Mat *ImgTarget, float a, float b, float eps, f
 //  C is the square of the inverse of the golden ratio.
 //
   c = 0.5f * ( 3.0f - (float)sqrt ( (double)5.0 ) );
-
   sa = a;
   sb = b;
   *x = sa + c * ( b - a );
-
   w = *x;
   v = w;
   e = 0.0;
- 
   //============================
 	//=====================================
   //c'est à dire MSE avec l'angle theta qui est ici la variable *x
 	double sq = sqrt(2);	
 	int taille2 = sq*taillePatch  ;
 
-
 	cv::Mat patchSrc = sub_milieu(*ImgSrc, ax+taillePatch/2+1 ,ay+taillePatch/2+1 ,taille2);
-	
 	/*
 	cv::namedWindow( "a envoyer", CV_WINDOW_AUTOSIZE );// Create a window for display.
-   cv::imshow( "a envoyer", patchSrc  );      */
-
+  cv::imshow( "a envoyer", patchSrc  );
+  */
 	cv::Mat patchTarget;
 	patchTarget = sub(*ImgTarget, bx, by,taillePatch);
 

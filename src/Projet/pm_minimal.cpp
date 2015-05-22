@@ -45,7 +45,7 @@ float a_brent = 0.0f;
 float b_brent = 180.0f;
 float t_brent = 0.000001f;
 float eps_brent = 10.0f*(float)sqrt((double)t_brent);
-float * x_brent =0;
+float x_brent = 0.0f;
 
 const int k = 5;
 
@@ -76,10 +76,8 @@ const int k = 5;
 void improve_guess(cv::Mat *a, cv::Mat *b, int ax, int ay, int &xbest, int &ybest, int &dbest, int bx, int by) {
   //int d = dist(a, b, ax, ay, bx, by, dbest);
 
-  int d = brent (a, b, a_brent, b_brent, eps_brent, t_brent, x_brent, ax, ay, bx, by, patch_w);
-  
-  std::cout << "improve_guess __BRENT d : " << d << std::endl;
-  
+  int d = brent (a, b, a_brent, b_brent, eps_brent, t_brent, &x_brent, ax, ay, bx, by, patch_w);
+    
   if (d < dbest) {
     dbest = d;
     xbest = bx;
@@ -97,17 +95,8 @@ void patchmatch(cv::Mat *a, cv::Mat *b, cv::Mat *ann, cv::Mat *annd,cv::Mat *knn
 
   int aew = a->cols - patch_w+1, aeh = a->rows - patch_w + 1;       /* Effective width and height (possible upper left corners of patches). */
   int bew = b->cols - patch_w+1, beh = b->rows - patch_w + 1;
-  
-  /*
-  memset(ann->data, 0, sizeof(int)*a->cols*a->rows);
-  memset(annd->data, 0, sizeof(int)*a->cols*a->rows);
-  */
-  
-  generalizedAnnStruct kNN[a->rows * a->cols];
 
- 
-
-  
+  //generalizedAnnStruct kNN[a->rows * a->cols];
 
   memset(ann->data, 0, sizeof(int)*a->cols*a->rows);
   memset(annd->data, 0, sizeof(int)*a->cols*a->rows);
@@ -118,7 +107,7 @@ void patchmatch(cv::Mat *a, cv::Mat *b, cv::Mat *ann, cv::Mat *annd,cv::Mat *knn
       int by = rand()%beh;
       ann->at<int>(ay,ax) = XY_TO_INT(bx, by);
       //SEGFAULT/
-      annd->at<int>(ay,ax) = brent (a, b, a_brent, b_brent, eps_brent, t_brent, x_brent, ax, ay, bx, by, patch_w);
+      annd->at<int>(ay,ax) = brent (a, b, a_brent, b_brent, eps_brent, t_brent, &x_brent, ax, ay, bx, by, patch_w);
       //FIN SEGFAULT/ 
     }
   }
@@ -134,7 +123,7 @@ void patchmatch(cv::Mat *a, cv::Mat *b, cv::Mat *ann, cv::Mat *annd,cv::Mat *knn
           int by = rand()%beh;
 
           (knn->at<cv::Vec<float, k> >(ay,ax))[i]= XY_TO_INT(bx, by);
-          (knnd->at<cv::Vec<float, k> >(ay,ax))[i]= brent (a, b, a_brent, b_brent, eps_brent, t_brent, x_brent, ax, ay, bx, by, patch_w);
+          (knnd->at<cv::Vec<float, k> >(ay,ax))[i]= brent (a, b, a_brent, b_brent, eps_brent, t_brent, &x_brent, ax, ay, bx, by, patch_w);
       }      
     }
   }
@@ -201,8 +190,8 @@ void patchmatch(cv::Mat *a, cv::Mat *b, cv::Mat *ann, cv::Mat *annd,cv::Mat *knn
 
         }
         
-        kNN[xend * yend].dx[0] = xbest;
-        kNN[xend * yend].dy[0] = ybest;
+        //kNN[xend * yend].dx[0] = xbest;
+        //kNN[xend * yend].dy[0] = ybest;
         
         ann->at<int>(ax,ay) = XY_TO_INT(xbest, ybest);
         annd->at<int>(ax,ay) = dbest;
@@ -251,7 +240,7 @@ void patchmatch(cv::Mat *a, cv::Mat *b, cv::Mat *ann, cv::Mat *annd,cv::Mat *knn
   cv::imwrite("results/knnd.png", *knnd1);
   
   char test[10] = "test.png\0";
-  displayMotionField(kNN, aew, aeh, test, patch_w, 0);
+  //displayMotionField(kNN, aew, aeh, test, patch_w, 0);
 }
 
 int main(int argc, char *argv[]) {
