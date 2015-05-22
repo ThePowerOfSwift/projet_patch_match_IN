@@ -20,28 +20,28 @@ void Rotation(cv::Mat& src, cv::Mat& dst, double angle)
 //c'est à dire MSE avec l'angle theta qui est ici la variable *x
 //u =angle de rotation
 
-float distance_rotation(cv::Mat *patchSrc, cv::Mat *patchTarget, float *u, int ax, int ay, int bx, int by)
+float distance_rotation(cv::Mat *patchSrc, cv::Mat *patchTarget, float *u/*, int ax, int ay, int bx, int by*/)
 {
 	//1 - faire une rotation de u sur le patch
 	//2 - calculer l'erreur entre le patch rotaté et la cible
 
 	cv::Size s = patchTarget->size();
 	int h = s.height;
-	int w = s.width;
+	//int w = s.width;
 
 	cv::Size s2 = patchSrc->size();
 	int h2= s2.height;
-	int w2 = s2.width;
+	//int w2 = s2.width;
 
-/*
+	/*
 	cv::namedWindow( "target", CV_WINDOW_AUTOSIZE );// Create a window for display.
-    	cv::imshow( "target", *patchTarget );                   // Show our image inside it.
+    cv::imshow( "target", *patchTarget );                   // Show our image inside it.
 	cv::waitKey(20);
 
 	cv::namedWindow( "source", CV_WINDOW_AUTOSIZE );// Create a window for display.
-    	cv::imshow( "source", *patchSrc );                   // Show our image inside it.
+    cv::imshow( "source", *patchSrc );                   // Show our image inside it.
 	cv::waitKey(20);
-*/
+	*/
 	
 	// envoyer dans patch_rotate la rotation de patchSrc d'un angle u
 	 cv::Mat patch_rotate ;
@@ -57,12 +57,12 @@ float distance_rotation(cv::Mat *patchSrc, cv::Mat *patchTarget, float *u, int a
 */
 
 	
-	int x = h2/2 ;
+	int x = h2 / 2;
 	//cv::Mat patch_final = sub(patch_rotate, x, x, h);
 	cv::Mat patch_final = sub_milieu(patch_rotate, x, x, h);
-	cv::namedWindow( "patch final", CV_WINDOW_AUTOSIZE );// Create a window for display.
-   cv::imshow( "patch final", patch_final );                   // Show our image inside it.
-	cv::waitKey(20);
+	//cv::namedWindow( "patch final", CV_WINDOW_AUTOSIZE );// Create a window for display.
+   	//cv::imshow( "patch final", patch_final );                   // Show our image inside it.
+	//cv::waitKey(20);
 
 	//Calculer l'erreur entre le patch rotaté et la cible
 	float erreur = dist(&patch_final, patchTarget);
@@ -80,12 +80,11 @@ float distance_rotation(cv::Mat *patchSrc, cv::Mat *patchTarget, float *u, int a
 cv::Mat sub(cv::Mat I, int x, int y, int size)
 {
 
-	int h = I.rows ;
-	int w = I.cols ;
+	//int h = I.rows ;
+	//int w = I.cols ;
 
-
-	int i = y;
-	int j = x;
+	//int i = y;
+	//int j = x;
 
 
 	if(x>=0 && y>=0)
@@ -187,7 +186,7 @@ int m = size/2;
 			//patch qui dépasse vers la gauche ou le haut
 			if(x+m < I.cols && y+m < I.rows)
 			{
-			//	std::cout << " cas 2" << std::endl ;
+				//std::cout << " cas 2" << std::endl ;
 				//copie de la partie contenue dans l'image
 				cv::Mat t = I(cv::Range::all(), cv::Range(0, m+x));
 				cv::Mat t2 = t(cv::Range(0, y+m), cv::Range::all());

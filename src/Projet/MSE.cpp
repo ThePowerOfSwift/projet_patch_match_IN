@@ -18,7 +18,7 @@ void gaussianKernel(float kernel [][7]){
    }
 }
 
-float dist ( cv::Mat *a, cv::Mat *b, int cutoff){
+float dist ( cv::Mat *a, cv::Mat *b/*, int cutoff*/){
 	float answer =0;
 	int size =a->size().height;
 	int radius = size/2;

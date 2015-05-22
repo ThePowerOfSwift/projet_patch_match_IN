@@ -161,7 +161,7 @@ void patchmatch(cv::Mat *a, cv::Mat *b, cv::Mat *ann, cv::Mat *annd,cv::Mat *knn
           int xp = INT_TO_X(vp) + xchange, yp = INT_TO_Y(vp);
           if ((unsigned) xp < (unsigned) bew) {
             improve_guess(a, b, ax, ay, xbest, ybest, dbest, xp, yp);
-            k_improve_guess(a,b,ax,ay,xbest,ybest,kdbest,xp,yp,guess_ok);
+            k_improve_guess(a,b,/*ax,ay,*/xbest,ybest,kdbest,xp,yp,guess_ok);
 
           }
         }
@@ -171,7 +171,7 @@ void patchmatch(cv::Mat *a, cv::Mat *b, cv::Mat *ann, cv::Mat *annd,cv::Mat *knn
           int xp = INT_TO_X(vp), yp = INT_TO_Y(vp) + ychange;
           if ((unsigned) yp < (unsigned) beh) {
             improve_guess(a, b, ax, ay, xbest, ybest, dbest, xp, yp);
-            k_improve_guess(a,b,ax,ay,xbest,ybest,kdbest,xp,yp,guess_ok);
+            k_improve_guess(a,b,/*ax,ay,*/xbest,ybest,kdbest,xp,yp,guess_ok);
 
           }
         }
@@ -186,7 +186,7 @@ void patchmatch(cv::Mat *a, cv::Mat *b, cv::Mat *ann, cv::Mat *annd,cv::Mat *knn
           int xp = xmin+rand()%(xmax-xmin);
           int yp = ymin+rand()%(ymax-ymin);
           improve_guess(a, b, ax, ay, xbest, ybest, dbest, xp, yp);
-          k_improve_guess(a,b,ax,ay,xbest,ybest,kdbest,xp,yp,guess_ok);
+          k_improve_guess(a,b,/*ax,ay,*/xbest,ybest,kdbest,xp,yp,guess_ok);
 
         }
         
@@ -239,7 +239,7 @@ void patchmatch(cv::Mat *a, cv::Mat *b, cv::Mat *ann, cv::Mat *annd,cv::Mat *knn
   cv::imwrite("results/knn.png", *knn1);
   cv::imwrite("results/knnd.png", *knnd1);
   
-  char test[10] = "test.png\0";
+  //lchar test[10] = "test.png\0";
   //displayMotionField(kNN, aew, aeh, test, patch_w, 0);
 }
 

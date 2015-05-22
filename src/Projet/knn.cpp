@@ -11,9 +11,10 @@
 
 const int k = 5;
 
-void k_improve_guess(cv::Mat *a, cv::Mat *b, int ax, int ay, int &xbest, int &ybest, int &kdbest, int bx, int by, bool &guess_ok) {
+void k_improve_guess(cv::Mat *a, cv::Mat *b, /*int ax, int ay,*/ int &xbest, int &ybest, int &kdbest, int bx, int by, bool &guess_ok) {
   
-  int d=dist(a,b);
+  int d = dist(a,b);
+  
   if (d < kdbest) {
     guess_ok=true;
     kdbest=d;

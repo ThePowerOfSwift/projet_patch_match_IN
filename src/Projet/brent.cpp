@@ -54,14 +54,18 @@ float brent (cv::Mat *ImgSrc, cv::Mat *ImgTarget, float a, float b, float eps, f
 	int taille2 = sq*taillePatch  ;
 
 	cv::Mat patchSrc = sub_milieu(*ImgSrc, ax+taillePatch/2+1 ,ay+taillePatch/2+1 ,taille2);
+
 	/*
 	cv::namedWindow( "a envoyer", CV_WINDOW_AUTOSIZE );// Create a window for display.
   cv::imshow( "a envoyer", patchSrc  );
   */
 	cv::Mat patchTarget;
+
 	patchTarget = sub(*ImgTarget, bx, by,taillePatch);
 
- 	fx = distance_rotation(&patchSrc, &patchTarget, x, ax, ay, bx, by); //*x =angle de rotation
+  std::cout << "avant dist_rotation" << std::endl;
+ 	fx = distance_rotation(&patchSrc, &patchTarget, x/*, ax, ay, bx, by*/); //*x =angle de rotation
+  std::cout << "après dist_rotation" << std::endl;
   //=================================================================
 
     
@@ -169,7 +173,7 @@ float brent (cv::Mat *ImgSrc, cv::Mat *ImgTarget, float a, float b, float eps, f
 		cv::Mat patchTarget2;
 		patchTarget2 = sub(*ImgTarget, bx, by,taillePatch);
 
-	 	fu = distance_rotation(&patchSrc2, &patchTarget2, &u, ax, ay, bx, by); //*x =angle de rotation
+	 	fu = distance_rotation(&patchSrc2, &patchTarget2, &u/*, ax, ay, bx, by*/); //*x =angle de rotation
      //=================================================================
 //
 //  Update A, B, V, W, and X.

@@ -6,7 +6,7 @@
 
 void Rotation(cv::Mat &I, cv::Mat &D, double alpha);
 
-float distance_rotation(cv::Mat *patchSrc, cv::Mat *patchTarget, float *u, int ax, int ay, int bx, int by);
+float distance_rotation(cv::Mat *patchSrc, cv::Mat *patchTarget, float *u/*, int ax, int ay, int bx, int by*/);
 
 cv::Mat sub(cv::Mat src, int x, int y, int size);
 
