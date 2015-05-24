@@ -1,8 +1,9 @@
 #pragma once
-#include "MSE.h"
-#include "visp/vpImage.h"
+
 #include <opencv2/core/core.hpp>
 #include <opencv2/highgui/highgui.hpp>
+
+#include "MSE.h"
 
 void Rotation(cv::Mat &I, cv::Mat &D, double alpha);
 

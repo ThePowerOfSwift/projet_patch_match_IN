@@ -2,6 +2,10 @@
 
 #include <opencv2/core/core.hpp>
 
+#include "distance_rotation.h"
+#include <opencv2/core/core.hpp>
+#include <opencv2/highgui/highgui.hpp>
+
 //*************************************************************
 // brent
 //*************************************************************

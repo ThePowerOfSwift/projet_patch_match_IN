@@ -1,8 +1,10 @@
-#include "distance_rotation.h"
-#include "brent.h" 
 #include <math.h>
 #include <opencv2/core/core.hpp>
 #include <opencv2/highgui/highgui.hpp>
+
+#include "distance_rotation.h"
+#include "brent.h" 
+
 
 
 //*************************************************************
@@ -63,9 +65,9 @@ float brent (cv::Mat *ImgSrc, cv::Mat *ImgTarget, float a, float b, float eps, f
 
 	patchTarget = sub(*ImgTarget, bx, by,taillePatch);
 
-  std::cout << "avant dist_rotation" << std::endl;
+  //std::cout << "avant dist_rotation" << std::endl;
  	fx = distance_rotation(&patchSrc, &patchTarget, x/*, ax, ay, bx, by*/); //*x =angle de rotation
-  std::cout << "après dist_rotation" << std::endl;
+  //std::cout << "après dist_rotation" << std::endl;
   //=================================================================
 
     

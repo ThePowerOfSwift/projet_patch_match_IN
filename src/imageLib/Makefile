@@ -13,7 +13,7 @@ libImg.a: $(OBJ)
 	rm -f libImg.a
 	ar ruc libImg.a $(OBJ)
 	ranlib libImg.a
-	mv *.o ../../build/
+	mv *.o ../../build/build_imageLib/
 	mv *.a ../../lib/
 
 clean: 

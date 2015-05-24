@@ -1,15 +1,14 @@
-
-#include "distance_rotation.h"
-
 #include <climits>
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/core/core.hpp>
-#include "opencv2/imgproc/imgproc.hpp"
-//#include "MSE.h"
+#include <opencv2/imgproc/imgproc.hpp>
+
+#include "distance_rotation.h"
+#include "MSE.h"
 
 //////////////////////////////////////////////////////     Rotation            /////////////////////////////////////////////////////////////////////////////
 
-void Rotation(cv::Mat& src, cv::Mat& dst, double angle)
+void Rotation(cv::Mat & src, cv::Mat & dst, double angle)
 {
     int len = std::max(src.cols, src.rows);
     cv::Point2f pt(len/2., len/2.);
@@ -30,7 +29,7 @@ float distance_rotation(cv::Mat *patchSrc, cv::Mat *patchTarget, float *u/*, int
 	//int w = s.width;
 
 	cv::Size s2 = patchSrc->size();
-	int h2= s2.height;
+	int h2 = s2.height;
 	//int w2 = s2.width;
 
 	/*
@@ -57,7 +56,7 @@ float distance_rotation(cv::Mat *patchSrc, cv::Mat *patchTarget, float *u/*, int
 */
 
 	
-	int x = h2 / 2;
+	int x = h2 / 2l;
 	//cv::Mat patch_final = sub(patch_rotate, x, x, h);
 	cv::Mat patch_final = sub_milieu(patch_rotate, x, x, h);
 	//cv::namedWindow( "patch final", CV_WINDOW_AUTOSIZE );// Create a window for display.

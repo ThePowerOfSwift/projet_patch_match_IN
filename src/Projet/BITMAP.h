@@ -1,4 +1,5 @@
-#pragma once
+#ifndef BITMAP_H
+#define BITMAP_H
 
 /* -------------------------------------------------------------------------
    BITMAP: Minimal image class
@@ -20,3 +21,5 @@ BITMAP *load_bitmap(const char *filename);
 void save_bitmap(BITMAP *bmp, const char *filename);
 BITMAP* matToBITMAP(cv::Mat a);
 cv::Mat BITMAPToMat(BITMAP *a);
+
+#endif
