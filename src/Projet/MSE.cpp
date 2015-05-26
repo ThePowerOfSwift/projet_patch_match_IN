@@ -37,16 +37,6 @@ improve_guess(cv::Mat * a, cv::Mat * b, int ax, int ay, int &xbest,
 	}
 }
 
-/*
-void improve_guess_brent(cv::Mat *a, cv::Mat *b, float a_brent, float b_brent, float eps_brent, float t_brent, float &x_brent, int ax, int ay, int bx, int by, int patch_w, int dbest){
-  int d = brent (a, b, a_brent, b_brent, eps_brent, t_brent, &x_brent, ax, ay, bx, by, patch_w);
-  if (d < dbest) {
-    dbest = d;
-    xbest = bx;
-    ybest = by;
-  }
-}
-*/
 void
 improve_guess(BITMAP * a, BITMAP * b, int ax, int ay, int &xbest,
 	      int &ybest, int &dbest, int bx, int by, int patch_w)
@@ -127,8 +117,7 @@ int dist(cv::Mat * a, cv::Mat * b)
 /* Measure distance between 2 patches with upper left corners (ax, ay) and (bx, by), terminating early if we exceed a cutoff distance.
    You could implement your own descriptor here. */
 int
-dist(BITMAP * a, BITMAP * b, int ax, int ay, int bx, int by, int patch_w,
-     int cutoff)
+dist(BITMAP * a, BITMAP * b, int ax, int ay, int bx, int by, int patch_w, int cutoff)
 {
 	int ans = 0;
 	for (int dy = 0; dy < patch_w; dy++) {
@@ -151,9 +140,7 @@ dist(BITMAP * a, BITMAP * b, int ax, int ay, int bx, int by, int patch_w,
 
 /* Measure distance between 2 patches with upper left corners (ax, ay) and (bx, by), terminating early if we exceed a cutoff distance.
    You could implement your own descriptor here. */
-int
-dist(cv::Mat * a, cv::Mat * b, int ax, int ay, int bx, int by, int patch_w,
-     int cutoff)
+int dist(cv::Mat * a, cv::Mat * b, int ax, int ay, int bx, int by, int patch_w, int cutoff)
 {
 	int ans = 0;
 	for (int dy = 0; dy < patch_w; dy++) {
