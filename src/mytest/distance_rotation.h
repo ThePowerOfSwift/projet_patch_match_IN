@@ -1,0 +1,15 @@
+#pragma once
+
+#include <opencv2/core/core.hpp>
+#include <opencv2/highgui/highgui.hpp>
+
+#include "MSE.h"
+
+void Rotation(cv::Mat & I, cv::Mat & D, double alpha);
+
+float distance_rotation(cv::Mat * patchSrc, cv::Mat * patchTarget,
+			float *u /*, int ax, int ay, int bx, int by */ );
+
+cv::Mat sub(cv::Mat src, int x, int y, int size);
+
+cv::Mat sub_milieu(cv::Mat I, int x, int y, int size);
