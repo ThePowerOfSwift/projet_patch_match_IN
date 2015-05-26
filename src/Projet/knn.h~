@@ -14,7 +14,9 @@ const int aw = 1;
 #define INT_TO_X(v) ((v)&((1<<12)-1))
 #define INT_TO_Y(v) ((v)>>12)
 
-void k_improve_guess(cv::Mat *a, cv::Mat *b, int &xbest, int &ybest, int &kdbest, int bx, int by, bool &guess_ok);
-void trier_voisins_init(cv::Mat *knn,cv::Mat *knnd, int x, int y);
-void trier_voisins(cv::Mat *knn, cv::Mat *knnd, int x, int y);
-void inserer_fin(int ax, int ay, int kxbest, int kybest, int kdbest,cv::Mat *knn,cv::Mat *knnd);
+void k_improve_guess (cv::Mat * a, cv::Mat * b, int &xbest, int &ybest,
+		      int &kdbest, int bx, int by, bool & guess_ok);
+void trier_voisins_init (cv::Mat * knn, cv::Mat * knnd, int x, int y);
+void trier_voisins (cv::Mat * knn, cv::Mat * knnd, int x, int y);
+void inserer_fin (int ax, int ay, int kxbest, int kybest, int kdbest,
+		  cv::Mat * knn, cv::Mat * knnd);

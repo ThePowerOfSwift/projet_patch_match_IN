@@ -13,8 +13,9 @@
 #define INT_TO_X(v) ((v)&((1<<12)-1))
 #define INT_TO_Y(v) ((v)>>12)
 
-void improve_guess(cv::Mat * a, cv::Mat * b, int &xbest, int &ybest, int &dbest,
-		   int bx, int by)
+void
+improve_guess(cv::Mat * a, cv::Mat * b, int &xbest, int &ybest, int &dbest,
+	      int bx, int by)
 {
 	int d = dist(a, b);
 	if (d < dbest) {
@@ -24,8 +25,9 @@ void improve_guess(cv::Mat * a, cv::Mat * b, int &xbest, int &ybest, int &dbest,
 	}
 }
 
-void improve_guess(cv::Mat * a, cv::Mat * b, int ax, int ay, int &xbest,
-		   int &ybest, int &dbest, int bx, int by, int patch_w)
+void
+improve_guess(cv::Mat * a, cv::Mat * b, int ax, int ay, int &xbest,
+	      int &ybest, int &dbest, int bx, int by, int patch_w)
 {
 	int d = dist(a, b, ax, ay, bx, by, patch_w, dbest);
 	if (d < dbest) {
@@ -45,8 +47,9 @@ void improve_guess_brent(cv::Mat *a, cv::Mat *b, float a_brent, float b_brent, f
   }
 }
 */
-void improve_guess(BITMAP * a, BITMAP * b, int ax, int ay, int &xbest,
-		   int &ybest, int &dbest, int bx, int by, int patch_w)
+void
+improve_guess(BITMAP * a, BITMAP * b, int ax, int ay, int &xbest,
+	      int &ybest, int &dbest, int bx, int by, int patch_w)
 {
 	int d = dist(a, b, ax, ay, bx, by, patch_w, dbest);
 	if (d < dbest) {
@@ -123,8 +126,9 @@ int dist(cv::Mat * a, cv::Mat * b)
 
 /* Measure distance between 2 patches with upper left corners (ax, ay) and (bx, by), terminating early if we exceed a cutoff distance.
    You could implement your own descriptor here. */
-int dist(BITMAP * a, BITMAP * b, int ax, int ay, int bx, int by, int patch_w,
-	 int cutoff)
+int
+dist(BITMAP * a, BITMAP * b, int ax, int ay, int bx, int by, int patch_w,
+     int cutoff)
 {
 	int ans = 0;
 	for (int dy = 0; dy < patch_w; dy++) {
@@ -147,19 +151,17 @@ int dist(BITMAP * a, BITMAP * b, int ax, int ay, int bx, int by, int patch_w,
 
 /* Measure distance between 2 patches with upper left corners (ax, ay) and (bx, by), terminating early if we exceed a cutoff distance.
    You could implement your own descriptor here. */
-int dist(cv::Mat * a, cv::Mat * b, int ax, int ay, int bx, int by, int patch_w,
-	 int cutoff)
+int
+dist(cv::Mat * a, cv::Mat * b, int ax, int ay, int bx, int by, int patch_w,
+     int cutoff)
 {
-	//if( ay >= a->rows || by >= b->rows || ay < 0 || by < 0 )
-		//return cutoff+1;
-
 	int ans = 0;
 	for (int dy = 0; dy < patch_w; dy++) {
-		cv::Mat arow = a->row(ay);
-		cv::Mat brow = b->row(by);
+		cv::Mat arow = a->row(ay + dy);
+		cv::Mat brow = b->row(by + dy);
 		for (int dx = 0; dx < patch_w; dx++) {
-			int ac = arow.at < int >(ax+dx);
-			int bc = brow.at < int >(bx+dx);
+			int ac = arow.at < int >(ax + dx);
+			int bc = brow.at < int >(bx + dx);
 			int dr = (ac & 255) - (bc & 255);
 			int dg = ((ac >> 8) & 255) - ((bc >> 8) & 255);
 			int db = (ac >> 16) - (bc >> 16);

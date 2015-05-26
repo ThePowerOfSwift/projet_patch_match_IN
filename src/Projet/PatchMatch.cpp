@@ -142,8 +142,8 @@ void patchmatch(BITMAP * a, BITMAP * b, BITMAP * ann, BITMAP * annd)
 void patchmatch(cv::Mat * a, cv::Mat * b, cv::Mat * ann, cv::Mat * annd)
 {
 	/* Initialize with random nearest neighbor field (NNF). */
-	ann = new cv::Mat_ < int >(a->rows, a->cols);
-	annd = new cv::Mat_ < int >(a->rows, a->cols);
+	ann = new cv::Mat_ < int >(a->cols, a->rows);
+	annd = new cv::Mat_ < int >(a->cols, a->rows);
 	int aew = a->cols - patch_w + 1, aeh = a->rows - patch_w + 1;	/* Effective width and height (possible upper left corners of patches). */
 	int bew = b->cols - patch_w + 1, beh = b->rows - patch_w + 1;
 
@@ -188,7 +188,6 @@ void patchmatch(cv::Mat * a, cv::Mat * b, cv::Mat * ann, cv::Mat * annd)
 							      patch_w);
 					}
 				}
-				std::cout<<"premiere improve_guess ok"<<std::endl;
 
 				if ((unsigned)(ay - ychange) < (unsigned)aeh) {
 					int vp =
@@ -202,7 +201,6 @@ void patchmatch(cv::Mat * a, cv::Mat * b, cv::Mat * ann, cv::Mat * annd)
 							      patch_w);
 					}
 				}
-				std::cout<<"2è improve_guess ok"<<std::endl;
 
 				/* Random search: Improve current guess by searching in boxes of exponentially decreasing size around the current best guess. */
 				int rs_start = rs_max;
@@ -217,12 +215,11 @@ void patchmatch(cv::Mat * a, cv::Mat * b, cv::Mat * ann, cv::Mat * annd)
 					    MIN(ybest + mag + 1, beh);
 					int xp = xmin + rand() % (xmax - xmin);
 					int yp = ymin + rand() % (ymax - ymin);
-					
+
 					improve_guess(a, b, ax, ay, xbest,
 						      ybest, dbest, xp, yp,
 						      patch_w);
 				}
-				std::cout<<"3è improve_guess ok"<<std::endl;
 
 				ann->at < int >(ax, ay) =
 				    XY_TO_INT(xbest, ybest);
@@ -239,8 +236,8 @@ void patchmatch(cv::Mat * a, cv::Mat * b, cv::Mat * ann, cv::Mat * annd)
 	delete test1;
 	delete test2;
 
-	cv::imwrite("results/ann_mat_opencv_Mode2.jpg", *ann);
-	cv::imwrite("results/annd_mat_opencv_Mode2.jpg", *annd);
+	cv::imwrite("results/ann_mat_opencv_Mode2.png", *ann);
+	cv::imwrite("results/annd_mat_opencv_Mode2.png", *annd);
 }
 
 /*
@@ -362,8 +359,9 @@ void patchmatch_brent(cv::Mat * a, cv::Mat * b, cv::Mat * ann, cv::Mat * annd)
  *
 **/
 /* Match image a to image b, returning the nearest neighbor field mapping a => b coords, stored in an RGB 24-bit image as (by<<12)|bx. */
-void patchmatch(cv::Mat * a, cv::Mat * b, cv::Mat * ann, cv::Mat * annd,
-		cv::Mat * knn, cv::Mat * knnd)
+void
+patchmatch(cv::Mat * a, cv::Mat * b, cv::Mat * ann, cv::Mat * annd,
+	   cv::Mat * knn, cv::Mat * knnd)
 {
 	/* Initialize with random nearest neighbor field (NNF). */
 	ann = new cv::Mat_ < int >(a->cols, a->rows);
