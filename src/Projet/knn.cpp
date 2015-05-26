@@ -56,9 +56,8 @@ void trier_voisins_init(cv::Mat * knn, cv::Mat * knnd, int x, int y)
 
 			if ((knnd->at < cv::Vec < float,
 			     k > >(y, x))[j] > valeurd) {
-				float inter =
-				    (knnd->at < cv::Vec < float,
-				     k > >(y, x))[j];
+				float inter = (knnd->at < cv::Vec < float,
+					       k > >(y, x))[j];
 				(knnd->at < cv::Vec < float, k > >(y, x))[j] =
 				    valeurd;
 				(knnd->at < cv::Vec < float, k > >(y, x))[i] =
@@ -96,8 +95,9 @@ void trier_voisins(cv::Mat * knn, cv::Mat * knnd, int x, int y)
 	}
 }
 
-void inserer_fin(int ax, int ay, int kxbest, int kybest, int kdbest,
-		 cv::Mat * knn, cv::Mat * knnd)
+void
+inserer_fin(int ax, int ay, int kxbest, int kybest, int kdbest,
+	    cv::Mat * knn, cv::Mat * knnd)
 {
 	std::cout << XY_TO_INT(kxbest, kybest) << std::endl;
 	(knn->at < cv::Vec < float, k > >(ay, ax))[k - 1] =

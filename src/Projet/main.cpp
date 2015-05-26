@@ -30,64 +30,163 @@ for(int j = 0;j < img.rows;j++){
     
 #include "BITMAP.h"
 #include "PatchMatch.h"
-int main(int argc, char *argv[])
+
+int main(int argc, char *argv[]) 
 {
-	argc--;
-	argv++;
-	if (argc != 3) {
-		fprintf(stderr, "pm_minimal a b ann annd mode\n" 
-			"Given input images a, b outputs nearest neighbor field 'ann' mapping a => b coords, and the squared L2 distance 'annd'\n"
-			
-			"These are stored as RGB 24-bit images, with a 24-bit int at every pixel. For the NNF we store (by<<12)|bx.");
-		exit(1);
-	}
-	printf("Loading mode\n");
-	int mode = atoi(argv[2]);
-	 BITMAP * ab = NULL, *bb = NULL, *annb = NULL, *anndb = NULL;
-	cv::Mat a, b, *ann = NULL, *annd = NULL, *knn = NULL, *knnd = NULL;
-	 switch (mode) {
-	case 1:
-		printf("Loading input images\n");
-		ab = load_bitmap(argv[0]);
-		bb = load_bitmap(argv[1]);
-		printf("Running Stanford PatchMatch\n");
-		patchmatch(ab, bb, annb, anndb);
-		break;
-	case 2:
-		printf("Loading input images\n");
-		a = cv::imread(argv[0], CV_LOAD_IMAGE_COLOR);	//GRAYSCALE
-		b = cv::imread(argv[1], CV_LOAD_IMAGE_COLOR);	//GRAYSCALE
-		printf("Running Stanford PatchMatch with OpenCV\n");
-		patchmatch(&a, &b, ann, annd);
-		delete ann;
-		delete annd;
-		break;
-	case 3:
-		printf("Loading input images\n");
-		a = cv::imread(argv[0], CV_LOAD_IMAGE_COLOR);	//GRAYSCALE
+	
+ 
+argc--;
+	
+ 
+argv++;
+	
+ 
+if (argc != 3) {
+		
+fprintf(stderr, "pm_minimal a b ann annd mode\n" 
+			 "Given input images a, b outputs nearest neighbor field 'ann' mapping a => b coords, and the squared L2 distance 'annd'\n"
+			 
+			 
+"These are stored as RGB 24-bit images, with a 24-bit int at every pixel. For the NNF we store (by<<12)|bx.");
+		
+exit(1);
+	
+}
+	
+ 
+printf("Loading mode\n");
+	
+ 
+int mode = atoi(argv[2]);
+	
+ 
+ 
+BITMAP * ab = NULL, *bb = NULL, *annb = NULL, *anndb = NULL;
+	
+ 
+cv::Mat a, b, *ann = NULL, *annd = NULL, *knn = NULL, *knnd = NULL;
+	
+ 
+ 
+switch (mode) {
+	
+ 
+case 1:
+		
+ 
+printf("Loading input images\n");
+		
+ 
+ab = load_bitmap(argv[0]);
+		
+ 
+bb = load_bitmap(argv[1]);
+		
+ 
+printf("Running Stanford PatchMatch\n");
+		
+ 
+patchmatch(ab, bb, annb, anndb);
+		
+ 
+break;
+	
+ 
+case 2:
+		
+ 
+printf("Loading input images\n");
+		
+ab = load_bitmap(argv[0]);
+bb = load_bitmap(argv[1]);
+ 
+a = BITMAPToMat(ab);//cv::imread(argv[0], CV_LOAD_IMAGE_GRAYSCALE);	//GRAYSCALE
+b = BITMAPToMat(bb);//cv::imread(argv[1], CV_LOAD_IMAGE_GRAYSCALE);	//GRAYSCALE
+printf("Running Stanford PatchMatch with OpenCV\n");
+		
+ 
+patchmatch(&a, &b, ann, annd);
+		
+ 
+delete ann;
+		
+ 
+delete annd;
+		
+ 
+break;
+	
+ 
+case 3:
+		
+ 
+printf("Loading input images\n");
+		
+ 
+a = cv::imread(argv[0], CV_LOAD_IMAGE_COLOR);	//GRAYSCALE
 		b = cv::imread(argv[1], CV_LOAD_IMAGE_COLOR);	//GRAYSCALE
 		printf("Running PatchMatch with OpenCV & Brent & Rotations\n");
-		patchmatch_brent(&a, &b, ann, annd);
-		delete ann;
-		delete annd;
-		break;
-	case 4:
-		printf("Loading input images\n");
-		a = cv::imread(argv[0], CV_LOAD_IMAGE_COLOR);	//GRAYSCALE
+		
+ 
+patchmatch_brent(&a, &b, ann, annd);
+		
+ 
+delete ann;
+		
+ 
+delete annd;
+		
+ 
+break;
+	
+ 
+case 4:
+		
+ 
+printf("Loading input images\n");
+		
+ 
+a = cv::imread(argv[0], CV_LOAD_IMAGE_COLOR);	//GRAYSCALE
 		b = cv::imread(argv[1], CV_LOAD_IMAGE_COLOR);	//GRAYSCALE
-		printf
+		printf 
 		    ("Running PatchMatch with OpenCV & Brent & Rotations & KNN\n");
-		patchmatch(&a, &b, ann, annd, knn, knnd);
-		delete ann;
-		delete annd;
-		delete knn;
-		delete knnd;
-		break;
-	default:
-		printf("Wrong PatchMatch Mode !\n");
-		break;
-	}
-	return 0;
-}
+		
+ 
+patchmatch(&a, &b, ann, annd, knn, knnd);
+		
+ 
+delete ann;
+		
+ 
+delete annd;
+		
+ 
+delete knn;
+		
+ 
+delete knnd;
+		
+ 
+break;
+	
+ 
+default:
+		
+ 
+printf("Wrong PatchMatch Mode !\n");
+		
+ 
+break;
+	
+ 
+}
+	
+ 
+return 0;
+
+ 
+}
 
 
+ 
+ 

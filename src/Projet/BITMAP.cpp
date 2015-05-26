@@ -130,22 +130,20 @@ void save_bitmap(BITMAP * bmp, const char *filename)
 	}
 }
 
-BITMAP *matToBITMAP(cv::Mat a)
-{
-	BITMAP *bmp = new BITMAP(a.cols, a.rows);
-	for (int i = 0; i < bmp->h; ++i)
-		for (int j = 0; j < bmp->w; ++j)
-			(*bmp)[i][j] = a.at < int >(i, j);
+BITMAP* matToBITMAP(cv::Mat a){
+  BITMAP *bmp = new BITMAP(a.cols, a.rows);
+  for (int i = 0; i < bmp->h; ++i)
+    for (int j = 0; j < bmp->w; ++j)
+      (*bmp)[i][j] = a.at<int>(i,j);
 
-	return bmp;
+  return bmp;
 }
 
-cv::Mat BITMAPToMat(BITMAP * a)
-{
-	cv::Mat_ < int >mt(a->h, a->w);
-	for (int i = 0; i < a->h; ++i)
-		for (int j = 0; j < a->w; ++j)
-			mt.at < int >(i, j) = (*a)[i][j];
+cv::Mat BITMAPToMat(BITMAP *a){
+  cv::Mat_<int> mt(a->h, a->w);
+  for (int i = 0; i < a->h; ++i)
+    for (int j = 0; j < a->w; ++j)
+      mt.at<int>(i,j) = (*a)[i][j];
 
-	return mt;
+  return mt;
 }

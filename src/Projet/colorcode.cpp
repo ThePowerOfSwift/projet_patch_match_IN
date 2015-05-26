@@ -15,7 +15,7 @@
 #define isnan(x) _isnan(x)	// VC++ uses _isnan() instead of isnan()
 //#else
 //#include <math.h>  // for isnan() everywhere else
-#endif	/*  */
+#endif				/*  */
 typedef unsigned char uchar;
 const double PI = 3.14159265359;
  
@@ -42,7 +42,9 @@ int colorwheel[MAXCOLS][3];
 	colorwheel[k][0] = r;
 	colorwheel[k][1] = g;
 	colorwheel[k][2] = b;
-}  void makecolorwheel() 
+}  void
+
+ makecolorwheel() 
 {
 	
 	    // relative lengths of color transitions:

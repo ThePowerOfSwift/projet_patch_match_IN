@@ -19,8 +19,9 @@ void Rotation(cv::Mat & src, cv::Mat & dst, double angle)
 //c'est à dire MSE avec l'angle theta qui est ici la variable *x
 //u =angle de rotation
 
-float distance_rotation(cv::Mat * patchSrc, cv::Mat * patchTarget,
-			float *u /*, int ax, int ay, int bx, int by */ )
+float
+distance_rotation(cv::Mat * patchSrc, cv::Mat * patchTarget,
+		  float *u /*, int ax, int ay, int bx, int by */ )
 {
 	//1 - faire une rotation de u sur le patch
 	//2 - calculer l'erreur entre le patch rotaté et la cible

@@ -17,8 +17,9 @@ float eps = 10.0f * (float)sqrt((double)t);
 
 //renvoit l'erreur minimale trouvée pour les différentes rotations testée
 /*float brent (vpImage<unsigned char> *patchSrc, vpImage<unsigned char> *patchTarget, float a, float b, float eps, float t, float *x )*/
-float brent(cv::Mat * ImgSrc, cv::Mat * ImgTarget, float a, float b, float eps,
-	    float t, float *x, int ax, int ay, int bx, int by, int taillePatch)
+float
+brent(cv::Mat * ImgSrc, cv::Mat * ImgTarget, float a, float b, float eps,
+      float t, float *x, int ax, int ay, int bx, int by, int taillePatch)
 {
 	float c;
 	float d;

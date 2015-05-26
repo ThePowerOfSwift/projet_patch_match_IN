@@ -31,7 +31,7 @@
 			float rad = sqrt(fx * fx + fy * fy);
 			maxrad = __max(maxrad, rad);
 	} }
-	     printf
+	 printf
 	    ("max motion: %.4f  motion range: u = %.3f .. %.3f;  v = %.3f .. %.3f\n",
 	     maxrad, minx, maxx, miny, maxy);
 	  if (maxmotion > 0)	// i.e., specified on commandline
@@ -53,9 +53,9 @@
 	}
 }
 
- void displayMotionField(generalizedAnnStruct * kNN, int sizeX, int sizeY,
-			   const char *outputColorFileName, int patchSize,
-			   int k) 
+ void
+displayMotionField(generalizedAnnStruct * kNN, int sizeX, int sizeY,
+		   const char *outputColorFileName, int patchSize, int k) 
 {
 	CFloatImage im;
 	CShape sh(sizeX, sizeY, 2);
