@@ -14,13 +14,14 @@
 #define MIN(a, b) ((a)<(b)?(a):(b))
 #endif
 
-// Problème possible avec le cutoff ( int, float)
+// Problème possible avec le cutoff ( int, float )
 void improve_guess(BITMAP * a, BITMAP * b, int ax, int ay, int &xbest,
 		   int &ybest, int &dbest, int bx, int by, int patch_w);
 void improve_guess(cv::Mat * a, cv::Mat * b, int ax, int ay, int &xbest,
 		   int &ybest, int &dbest, int bx, int by, int patch_w);
 void improve_guess(cv::Mat * a, cv::Mat * b, float a_brent, float b_brent, float eps_brent,
       float t_brent, float *x_brent, int ax, int ay, int bx, int by, int patch_w, int &dbest, int &xbest, int &ybest);
+void improve_guess_test(cv::Mat * a, cv::Mat * b, int ax, int ay, int &xbest, int &ybest, int &dbest, int bx, int by);
 	  
 void gaussianKernel(float kernel[][7]);
 

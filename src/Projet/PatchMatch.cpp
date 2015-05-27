@@ -140,11 +140,7 @@ void patchmatch(BITMAP * a, BITMAP * b, BITMAP * ann, BITMAP * annd)
  *
 **/
 void patchmatch(cv::Mat * a, cv::Mat * b, cv::Mat * ann, cv::Mat * annd)
-{
-	
-	//generalizedAnnStruct *kNN;//[a->rows * a->cols];
-	//kNN = (generalizedAnnStruct *) malloc (a->rows * a->cols);
-	
+{	
 	generalizedAnnStruct* kNN = (generalizedAnnStruct*) malloc(sizeof(generalizedAnnStruct)*(a->rows * a->cols));
 
 	/* Initialize with random nearest neighbor field (NNF). */
@@ -253,7 +249,7 @@ void patchmatch(cv::Mat * a, cv::Mat * b, cv::Mat * ann, cv::Mat * annd)
 
 	cv::imwrite("results/annd_mat_opencv_MODE2.png", *annd);
 	
-	char test[10] = "results/kNN_Mode2.ppm\0";
+	char test[25] = "results/kNN_Mode2.ppm\0";
 	displayMotionField(kNN, a->cols, a->rows, test, patch_w, 0);
 }
 
@@ -281,9 +277,9 @@ void patchmatch_brent(cv::Mat * a, cv::Mat * b, cv::Mat * ann, cv::Mat * annd)
 			int bx = rand() % bew;
 			int by = rand() % beh;
 			ann->at < int >(ay, ax) = XY_TO_INT(bx, by);
-			annd->at < int >(ay, ax) =
-			    brent(a, b, a_brent, b_brent, eps_brent, t_brent,
-				  &x_brent, ax, ay, bx, by, patch_w);
+			annd->at < int >(ay, ax) = dist(a, b, ax, ay, bx, by);
+			    //brent(a, b, a_brent, b_brent, eps_brent, t_brent,
+				  //&x_brent, ax, ay, bx, by, patch_w);
 		}
 	}
 
@@ -314,7 +310,8 @@ void patchmatch_brent(cv::Mat * a, cv::Mat * b, cv::Mat * ann, cv::Mat * annd)
 					int xp = INT_TO_X(vp) + xchange, yp =
 					    INT_TO_Y(vp);
 					if ((unsigned)xp < (unsigned)bew)
-						improve_guess( a, b, a_brent, b_brent, eps_brent, t_brent, &x_brent, ax, ay, xp, yp, patch_w, dbest, xbest, ybest);
+						improve_guess_test(a, b, ax, ay, xbest, ybest, dbest, xp, yp);
+						//improve_guess( a, b, a_brent, b_brent, eps_brent, t_brent, &x_brent, ax, ay, xp, yp, patch_w, dbest, xbest, ybest);
 				}
 
 				if ((unsigned)(ay - ychange) < (unsigned)aeh) {
@@ -323,7 +320,8 @@ void patchmatch_brent(cv::Mat * a, cv::Mat * b, cv::Mat * ann, cv::Mat * annd)
 					int xp = INT_TO_X(vp), yp =
 					    INT_TO_Y(vp) + ychange;
 					if ((unsigned)yp < (unsigned)beh)
-						improve_guess( a, b, a_brent, b_brent, eps_brent, t_brent, &x_brent, ax, ay, xp, yp, patch_w, dbest, xbest, ybest);
+						improve_guess_test(a, b, ax, ay, xbest, ybest, dbest, xp, yp);
+						//improve_guess( a, b, a_brent, b_brent, eps_brent, t_brent, &x_brent, ax, ay, xp, yp, patch_w, dbest, xbest, ybest);
 				}
 
 				/* Random search: Improve current guess by searching in boxes of exponentially decreasing size around the current best guess. */
@@ -339,7 +337,8 @@ void patchmatch_brent(cv::Mat * a, cv::Mat * b, cv::Mat * ann, cv::Mat * annd)
 					    MIN(ybest + mag + 1, beh);
 					int xp = xmin + rand() % (xmax - xmin);
 					int yp = ymin + rand() % (ymax - ymin);
-					improve_guess( a, b, a_brent, b_brent, eps_brent, t_brent, &x_brent, ax, ay, xp, yp, patch_w, dbest, xbest, ybest);
+					improve_guess_test(a, b, ax, ay, xbest, ybest, dbest, xp, yp);
+					//improve_guess( a, b, a_brent, b_brent, eps_brent, t_brent, &x_brent, ax, ay, xp, yp, patch_w, dbest, xbest, ybest );
 				}
 
 				ann->at < int >(ay, ax) = XY_TO_INT(xbest, ybest);

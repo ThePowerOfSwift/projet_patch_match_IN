@@ -36,6 +36,16 @@ improve_guess(cv::Mat * a, cv::Mat * b, int ax, int ay, int &xbest,
 	}
 }
 
+void improve_guess_test(cv::Mat * a, cv::Mat * b, int ax, int ay, int &xbest, int &ybest, int &dbest, int bx, int by){
+
+	int d = dist(a, b, ax, ay, bx, by, dbest);
+	if (d < dbest) {
+		dbest = d;
+		xbest = bx;
+		ybest = by;
+	}
+}
+
 void
 improve_guess(BITMAP * a, BITMAP * b, int ax, int ay, int &xbest,
 	      int &ybest, int &dbest, int bx, int by, int patch_w)
@@ -68,11 +78,7 @@ void gaussianKernel(float kernel[][7])
 	}
 }
 
-<<<<<<< HEAD
 float dist(cv::Mat * a, cv::Mat * b, float cutoff)
-=======
-float dist(cv::Mat * a, cv::Mat * b)
->>>>>>> eb2f56540b6c3d22932ae53177e6b4308435da1e
 {
 	float answer = 0;
 	int size = a->size().height;
