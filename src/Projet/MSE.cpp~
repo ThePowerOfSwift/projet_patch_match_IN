@@ -25,10 +25,17 @@ void improve_guess(cv::Mat * a, cv::Mat * b, float a_brent, float b_brent, float
 }
 
 void
+<<<<<<< HEAD
 improve_guess(cv::Mat * a, cv::Mat * b, int ax, int ay, int &xbest,
 	      int &ybest, int &dbest, int bx, int by, int patch_w)
 {
 	int d = dist(a, b, ax, ay, bx, by, patch_w, dbest);
+=======
+improve_guess(cv::Mat * a, cv::Mat * b, int &xbest, int &ybest, int &dbest,
+	      int bx, int by)
+{
+	int d = dist(a, b);
+>>>>>>> eb2f56540b6c3d22932ae53177e6b4308435da1e
 	if (d < dbest) {
 		dbest = d;
 		xbest = bx;
@@ -37,7 +44,11 @@ improve_guess(cv::Mat * a, cv::Mat * b, int ax, int ay, int &xbest,
 }
 
 void
+<<<<<<< HEAD
 improve_guess(BITMAP * a, BITMAP * b, int ax, int ay, int &xbest,
+=======
+improve_guess(cv::Mat * a, cv::Mat * b, int ax, int ay, int &xbest,
+>>>>>>> eb2f56540b6c3d22932ae53177e6b4308435da1e
 	      int &ybest, int &dbest, int bx, int by, int patch_w)
 {
 	int d = dist(a, b, ax, ay, bx, by, patch_w, dbest);
@@ -48,6 +59,7 @@ improve_guess(BITMAP * a, BITMAP * b, int ax, int ay, int &xbest,
 	}
 }
 
+<<<<<<< HEAD
 void gaussianKernel(float kernel[][7])
 {
 	float mean = 3;
@@ -124,12 +136,62 @@ float dist(cv::Mat * a, cv::Mat * b, int ax, int ay, int bx, int by, float cutof
 	int amid = a->at < int >(ay+3, ax+3);
 	int bmid = b->at < int >(by+3, bx+3);
 	float variance = 34.641016151; // (Racine de 3) * 20
+=======
+void
+improve_guess(BITMAP * a, BITMAP * b, int ax, int ay, int &xbest,
+	      int &ybest, int &dbest, int bx, int by, int patch_w)
+{
+	int d = dist(a, b, ax, ay, bx, by, patch_w, dbest);
+	if (d < dbest) {
+		dbest = d;
+		xbest = bx;
+		ybest = by;
+	}
+}
+
+void gaussianKernel(float kernel[][7])
+{
+	float mean = 3;
+	float sum = 0.0;
+	for (int i = 0; i < 7; i++) {
+		for (int j = 0; j < 7; j++) {
+			kernel[i][j] =
+			    exp(-0.5 *
+				(pow((i - mean), 2.0) +
+				 pow((j - mean), 2.0))) / (2 * M_PI);
+			sum += kernel[i][j];
+		}
+	}
+	for (int i = 0; i < 7; i++) {
+		for (int j = 0; j < 7; j++) {
+			kernel[i][j] /= sum;
+		}
+	}
+}
+
+float dist(cv::Mat * a, cv::Mat * b)
+{
+	int answer = 0;
+	int size = a->size().height;
+	int radius = size / 2;
+	int W = 0;
+	int amid = a->at < int >(3, 3);
+	int bmid = b->at < int >(3, 3);
+	//Faire un define
+	float kernel[7][7];
+	gaussianKernel(kernel);
+>>>>>>> eb2f56540b6c3d22932ae53177e6b4308435da1e
 
 	for (int dy = 0; dy < size; dy++) {
 		for (int dx = 0; dx < size; dx++) {
 
+<<<<<<< HEAD
 			int ac = a->at < int >(ay+dy, ax+dx);
 			int bc = b->at < int >(by+dy, bx+dx);
+=======
+			int ac = a->at < int >(dy, dx);
+			int bc = b->at < int >(dy, dx);
+>>>>>>> eb2f56540b6c3d22932ae53177e6b4308435da1e
 
 			// Comparaison distance Faire un define
 			float delta = std::abs(radius * 2 - dx - dy);
@@ -139,9 +201,15 @@ float dist(cv::Mat * a, cv::Mat * b, int ax, int ay, int bx, int by, float cutof
 			    exp(-pow(bc - bmid, 2) / 0.1);
 			// Comparaison des différents niveaux de couleurs RGB
 			cv::Point3_ < uchar > *pa =
+<<<<<<< HEAD
 			    a->ptr < cv::Point3_ < uchar > >(ay+dy, ax+dx);
 			cv::Point3_ < uchar > *pb =
 			    b->ptr < cv::Point3_ < uchar > >(by+dy, bx+dx);
+=======
+			    a->ptr < cv::Point3_ < uchar > >(dy, dx);
+			cv::Point3_ < uchar > *pb =
+			    b->ptr < cv::Point3_ < uchar > >(dy, dx);
+>>>>>>> eb2f56540b6c3d22932ae53177e6b4308435da1e
 
 			float dr = abs(pa->z - pb->z);
 			float dg = abs(pa->y - pb->y);
@@ -149,21 +217,32 @@ float dist(cv::Mat * a, cv::Mat * b, int ax, int ay, int bx, int by, float cutof
 
 			float erreur = dr + dg + db;
 			// Utilisation d'une foction robuste: noyau gaussien
+<<<<<<< HEAD
 			float C = log(1 + 1/2*(erreur/variance));
+=======
+			float C = kernel[dy][dx] * erreur;
+>>>>>>> eb2f56540b6c3d22932ae53177e6b4308435da1e
 			// Facteur de normalisation
 			W += w;
 			answer += w * C;
 		}
+<<<<<<< HEAD
 	}
 	if (answer >= cutoff) {
 		return cutoff;
+=======
+>>>>>>> eb2f56540b6c3d22932ae53177e6b4308435da1e
 	}
 	return answer / W;
 }
 
 /* Measure distance between 2 patches with upper left corners (ax, ay) and (bx, by), terminating early if we exceed a cutoff distance.
    You could implement your own descriptor here. */
+<<<<<<< HEAD
 int
+=======
+float
+>>>>>>> eb2f56540b6c3d22932ae53177e6b4308435da1e
 dist(BITMAP * a, BITMAP * b, int ax, int ay, int bx, int by, int patch_w, int cutoff)
 {
 	int ans = 0;
