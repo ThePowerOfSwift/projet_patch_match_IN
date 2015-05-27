@@ -23,7 +23,7 @@ void improve_guess(cv::Mat * a, cv::Mat * b, float a_brent, float b_brent, float
 	  
 void gaussianKernel(float kernel[][7]);
 
-int dist(cv::Mat * a, cv::Mat * b);
+float dist(cv::Mat * a, cv::Mat * b);
 int dist(BITMAP * a, BITMAP * b, int ax, int ay, int bx, int by, int patch_w,
 	 int cutoff = INT_MAX);
 int dist(cv::Mat * a, cv::Mat * b, int ax, int ay, int bx, int by,
