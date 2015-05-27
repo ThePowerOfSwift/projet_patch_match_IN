@@ -12,12 +12,11 @@
 #define XY_TO_INT(x, y) (((y)<<12)|(x))
 #define INT_TO_X(v) ((v)&((1<<12)-1))
 #define INT_TO_Y(v) ((v)>>12)
-
-void
-improve_guess(cv::Mat * a, cv::Mat * b, int &xbest, int &ybest, int &dbest,
-	      int bx, int by)
+//remplacer dist par brent
+void improve_guess(cv::Mat * a, cv::Mat * b, float a_brent, float b_brent, float eps_brent,
+      float t_brent, float *x_brent, int ax, int ay, int bx, int by, int patch_w, int &dbest, int &xbest, int &ybest)
 {
-	int d = dist(a, b);
+	int d = brent(a, b, a_brent, b_brent, eps_brent, t_brent, x_brent, ax, ay, bx, by, patch_w);
 	if (d < dbest) {
 		dbest = d;
 		xbest = bx;
