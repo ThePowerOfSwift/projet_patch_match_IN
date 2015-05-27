@@ -69,7 +69,7 @@ void gaussianKernel(float kernel[][7])
 	}
 }
 
-int dist(cv::Mat * a, cv::Mat * b)
+float dist(cv::Mat * a, cv::Mat * b)
 {
 	int answer = 0;
 	int size = a->size().height;
@@ -116,7 +116,7 @@ int dist(cv::Mat * a, cv::Mat * b)
 
 /* Measure distance between 2 patches with upper left corners (ax, ay) and (bx, by), terminating early if we exceed a cutoff distance.
    You could implement your own descriptor here. */
-int
+float
 dist(BITMAP * a, BITMAP * b, int ax, int ay, int bx, int by, int patch_w, int cutoff)
 {
 	int ans = 0;
@@ -140,7 +140,7 @@ dist(BITMAP * a, BITMAP * b, int ax, int ay, int bx, int by, int patch_w, int cu
 
 /* Measure distance between 2 patches with upper left corners (ax, ay) and (bx, by), terminating early if we exceed a cutoff distance.
    You could implement your own descriptor here. */
-int dist(cv::Mat * a, cv::Mat * b, int ax, int ay, int bx, int by, int patch_w, int cutoff)
+float dist(cv::Mat * a, cv::Mat * b, int ax, int ay, int bx, int by, int patch_w, int cutoff)
 {
 	int ans = 0;
 	for (int dy = 0; dy < patch_w; dy++) {
