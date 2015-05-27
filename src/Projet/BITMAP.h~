@@ -1,0 +1,26 @@
+#ifndef BITMAP_H
+#define BITMAP_H
+
+/* -------------------------------------------------------------------------
+   BITMAP: Minimal image class
+   ------------------------------------------------------------------------- */
+#include <opencv2/core/core.hpp>
+
+class BITMAP
+{
+
+public:
+  int w, h;
+  int *data;
+    BITMAP (int w_, int h_);
+   ~BITMAP ();
+  int *operator[] (int y);
+};
+
+void check_im ();
+BITMAP *load_bitmap (const char *filename);
+void save_bitmap (BITMAP * bmp, const char *filename);
+BITMAP *matToBITMAP (cv::Mat a);
+cv::Mat BITMAPToMat (BITMAP * a);
+
+#endif

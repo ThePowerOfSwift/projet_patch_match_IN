@@ -1,1 +1,1 @@
-./PatchMatch images/a.png images/b.png results/ann.jpg results/annd.jpg
+./PatchMatch images/pirate1.jpg images/pirate2.jpg 2
