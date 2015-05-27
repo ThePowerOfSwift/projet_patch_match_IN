@@ -296,9 +296,7 @@ void patchmatch_brent(cv::Mat * a, cv::Mat * b, cv::Mat * ann, cv::Mat * annd)
 					int xp = INT_TO_X(vp) + xchange, yp =
 					    INT_TO_Y(vp);
 					if ((unsigned)xp < (unsigned)bew)
-						improve_guess(a, b, xbest,
-							      ybest, dbest, xp,
-							      yp);
+						improve_guess( a, b, a_brent, b_brent, eps_brent, t_brent, &x_brent, ax, ay, xp, yp, patch_w, dbest, xbest, ybest);
 				}
 
 				if ((unsigned)(ay - ychange) < (unsigned)aeh) {
@@ -307,9 +305,7 @@ void patchmatch_brent(cv::Mat * a, cv::Mat * b, cv::Mat * ann, cv::Mat * annd)
 					int xp = INT_TO_X(vp), yp =
 					    INT_TO_Y(vp) + ychange;
 					if ((unsigned)yp < (unsigned)beh)
-						improve_guess(a, b, xbest,
-							      ybest, dbest, xp,
-							      yp);
+						improve_guess( a, b, a_brent, b_brent, eps_brent, t_brent, &x_brent, ax, ay, xp, yp, patch_w, dbest, xbest, ybest);
 				}
 
 				/* Random search: Improve current guess by searching in boxes of exponentially decreasing size around the current best guess. */
@@ -325,26 +321,16 @@ void patchmatch_brent(cv::Mat * a, cv::Mat * b, cv::Mat * ann, cv::Mat * annd)
 					    MIN(ybest + mag + 1, beh);
 					int xp = xmin + rand() % (xmax - xmin);
 					int yp = ymin + rand() % (ymax - ymin);
-					improve_guess(a, b, xbest, ybest, dbest,
-						      xp, yp);
+					improve_guess( a, b, a_brent, b_brent, eps_brent, t_brent, &x_brent, ax, ay, xp, yp, patch_w, dbest, xbest, ybest);
 				}
 
-				ann->at < int >(ay, ax) =
-				    XY_TO_INT(xbest, ybest);
+				ann->at < int >(ay, ax) = XY_TO_INT(xbest, ybest);
 				annd->at < int >(ay, ax) = dbest;
 			}
 		}
 	}
 	printf("Saving output images\n");
-	BITMAP *test1 = matToBITMAP(*annd);
-	BITMAP *test2 = matToBITMAP(*ann);
-
-	save_bitmap(test1, "results/annd_matToBitmap_MODE3.jpg");
-	save_bitmap(test2, "results/ann_matToBitmap_MODE3.jpg");
-	delete test1;
-	delete test2;
-
-	//cv::imwrite("ann.png", *ann);
+	cv::imwrite("results/ann_mat_opencv_MODE3.png", *ann);
 	cv::imwrite("results/annd_mat_opencv_MODE3.png", *annd);
 }
 
@@ -443,9 +429,7 @@ patchmatch(cv::Mat * a, cv::Mat * b, cv::Mat * ann, cv::Mat * annd,
 					int xp = INT_TO_X(vp) + xchange, yp =
 					    INT_TO_Y(vp);
 					if ((unsigned)xp < (unsigned)bew) {
-						improve_guess(a, b, xbest,
-							      ybest, dbest, xp,
-							      yp);
+						improve_guess( a, b, a_brent, b_brent, eps_brent, t_brent, &x_brent, ax, ay, xp, yp, patch_w, dbest, xbest, ybest);
 						k_improve_guess(a, b, xbest,
 								ybest, kdbest,
 								xp, yp,
@@ -459,11 +443,8 @@ patchmatch(cv::Mat * a, cv::Mat * b, cv::Mat * ann, cv::Mat * annd,
 					int xp = INT_TO_X(vp), yp =
 					    INT_TO_Y(vp) + ychange;
 					if ((unsigned)yp < (unsigned)beh) {
-						improve_guess(a, b, xbest,
-							      ybest, dbest, xp,
-							      yp);
+						improve_guess( a, b, a_brent, b_brent, eps_brent, t_brent, &x_brent, ax, ay, xp, yp, patch_w, dbest, xbest, ybest);
 						k_improve_guess(a, b,
-								/*ax,ay, */
 								xbest, ybest,
 								kdbest, xp, yp,
 								guess_ok);
@@ -483,8 +464,7 @@ patchmatch(cv::Mat * a, cv::Mat * b, cv::Mat * ann, cv::Mat * annd,
 					    MIN(ybest + mag + 1, beh);
 					int xp = xmin + rand() % (xmax - xmin);
 					int yp = ymin + rand() % (ymax - ymin);
-					improve_guess(a, b, xbest, ybest, dbest,
-						      xp, yp);
+					improve_guess( a, b, a_brent, b_brent, eps_brent, t_brent, &x_brent, ax, ay, xp, yp, patch_w, dbest, xbest, ybest);
 					k_improve_guess(a, b, xbest, ybest,
 							kdbest, xp, yp,
 							guess_ok);

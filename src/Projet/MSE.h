@@ -18,10 +18,9 @@ void improve_guess(BITMAP * a, BITMAP * b, int ax, int ay, int &xbest,
 		   int &ybest, int &dbest, int bx, int by, int patch_w);
 void improve_guess(cv::Mat * a, cv::Mat * b, int ax, int ay, int &xbest,
 		   int &ybest, int &dbest, int bx, int by, int patch_w);
-void improve_guess(cv::Mat * a, cv::Mat * b, int &xbest, int &ybest,
-		   int &dbest, int bx, int by);
-//void improve_guess_brent(cv::Mat *a, cv::Mat *b, float a_brent, float b_brent, float eps_brent, float t_brent, float &x_brent, int ax, int ay, int bx, int by, int patch_w);
-
+void improve_guess(cv::Mat * a, cv::Mat * b, float a_brent, float b_brent, float eps_brent,
+      float t_brent, float *x_brent, int ax, int ay, int bx, int by, int patch_w, int &dbest, int &xbest, int &ybest);
+	  
 void gaussianKernel(float kernel[][7]);
 
 int dist(cv::Mat * a, cv::Mat * b);
