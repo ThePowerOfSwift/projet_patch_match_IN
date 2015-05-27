@@ -13,11 +13,10 @@
 #define INT_TO_X(v) ((v)&((1<<12)-1))
 #define INT_TO_Y(v) ((v)>>12)
 
-void
-improve_guess(cv::Mat * a, cv::Mat * b, int &xbest, int &ybest, int &dbest,
-	      int bx, int by)
+void improve_guess(cv::Mat * a, cv::Mat * b, float a_brent, float b_brent, float eps_brent,
+      float t_brent, float *x_brent, int ax, int ay, int bx, int by, int patch_w, int &dbest, int &xbest, int &ybest)
 {
-	int d = dist(a, b);
+	int d = brent(a, b, a_brent, b_brent, eps_brent, t_brent, x_brent, ax, ay, bx, by, patch_w);
 	if (d < dbest) {
 		dbest = d;
 		xbest = bx;
@@ -69,17 +68,19 @@ void gaussianKernel(float kernel[][7])
 	}
 }
 
-int dist(cv::Mat * a, cv::Mat * b)
+<<<<<<< HEAD
+float dist(cv::Mat * a, cv::Mat * b, float cutoff)
+=======
+float dist(cv::Mat * a, cv::Mat * b)
+>>>>>>> eb2f56540b6c3d22932ae53177e6b4308435da1e
 {
-	int answer = 0;
+	float answer = 0;
 	int size = a->size().height;
 	int radius = size / 2;
 	int W = 0;
 	int amid = a->at < int >(3, 3);
 	int bmid = b->at < int >(3, 3);
-	//Faire un define
-	float kernel[7][7];
-	gaussianKernel(kernel);
+	float variance = 34.641016151; // (Racine de 3) * 20
 
 	for (int dy = 0; dy < size; dy++) {
 		for (int dx = 0; dx < size; dx++) {
@@ -105,11 +106,61 @@ int dist(cv::Mat * a, cv::Mat * b)
 
 			float erreur = dr + dg + db;
 			// Utilisation d'une foction robuste: noyau gaussien
-			float C = kernel[dy][dx] * erreur;
+			float C = log(1 + 1/2*(erreur/variance));
 			// Facteur de normalisation
 			W += w;
 			answer += w * C;
 		}
+	}
+	if (answer >= cutoff) {
+		return cutoff;
+	}
+	return answer / W;
+}
+
+/* dist marchant avec l'image et les coordonnées du patch */
+float dist(cv::Mat * a, cv::Mat * b, int ax, int ay, int bx, int by, float cutoff)
+{
+	float answer = 0;
+	int size = a->size().height;
+	int radius = size / 2;
+	int W = 0;
+	int amid = a->at < int >(ay+3, ax+3);
+	int bmid = b->at < int >(by+3, bx+3);
+	float variance = 34.641016151; // (Racine de 3) * 20
+
+	for (int dy = 0; dy < size; dy++) {
+		for (int dx = 0; dx < size; dx++) {
+
+			int ac = a->at < int >(ay+dy, ax+dx);
+			int bc = b->at < int >(by+dy, bx+dx);
+
+			// Comparaison distance Faire un define
+			float delta = std::abs(radius * 2 - dx - dy);
+			float w =
+			    exp(delta / (0.5 * radius)) *
+			    exp(-pow(ac - amid, 2) / 0.1) *
+			    exp(-pow(bc - bmid, 2) / 0.1);
+			// Comparaison des différents niveaux de couleurs RGB
+			cv::Point3_ < uchar > *pa =
+			    a->ptr < cv::Point3_ < uchar > >(ay+dy, ax+dx);
+			cv::Point3_ < uchar > *pb =
+			    b->ptr < cv::Point3_ < uchar > >(by+dy, bx+dx);
+
+			float dr = abs(pa->z - pb->z);
+			float dg = abs(pa->y - pb->y);
+			float db = abs(pa->x - pb->x);
+
+			float erreur = dr + dg + db;
+			// Utilisation d'une foction robuste
+			float C = log(1 + 1/2*(erreur/variance));
+			// Facteur de normalisation
+			W += w;
+			answer += w * C;
+		}
+	}
+	if (answer >= cutoff) {
+		return cutoff;
 	}
 	return answer / W;
 }

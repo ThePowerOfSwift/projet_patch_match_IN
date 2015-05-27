@@ -76,12 +76,12 @@ int main(int argc, char *argv[])
 		 
 		case 3:
 		printf("Loading input images\n");
-		ab = load_bitmap(argv[0]);
+		/*ab = load_bitmap(argv[0]);
 		bb = load_bitmap(argv[1]);
 		a = BITMAPToMat(ab);
-		b = BITMAPToMat(bb);
-		//a = cv::imread(argv[0], CV_LOAD_IMAGE_COLOR);
-		//b = cv::imread(argv[1], CV_LOAD_IMAGE_COLOR);
+		b = BITMAPToMat(bb);*/
+		a = cv::imread(argv[0], CV_LOAD_IMAGE_COLOR);
+		b = cv::imread(argv[1], CV_LOAD_IMAGE_COLOR);
 		printf("Running PatchMatch with OpenCV & Brent & Rotations\n");		
 			patchmatch_brent(&a, &b, ann, annd);
 			delete ann;
