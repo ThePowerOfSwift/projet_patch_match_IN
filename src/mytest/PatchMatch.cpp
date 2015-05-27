@@ -142,8 +142,8 @@ void patchmatch(BITMAP * a, BITMAP * b, BITMAP * ann, BITMAP * annd)
 void patchmatch(cv::Mat * a, cv::Mat * b, cv::Mat * ann, cv::Mat * annd)
 {
 	/* Initialize with random nearest neighbor field (NNF). */
-	ann = new cv::Mat_ < int >(a->cols, a->rows);
-	annd = new cv::Mat_ < int >(a->cols, a->rows);
+	ann = new cv::Mat_ < int >(a->rows, a->cols);
+	annd = new cv::Mat_ < int >(a->rows, a->cols);
 	int aew = a->cols - patch_w + 1, aeh = a->rows - patch_w + 1;	/* Effective width and height (possible upper left corners of patches). */
 	int bew = b->cols - patch_w + 1, beh = b->rows - patch_w + 1;
 
@@ -215,15 +215,14 @@ void patchmatch(cv::Mat * a, cv::Mat * b, cv::Mat * ann, cv::Mat * annd)
 					    MIN(ybest + mag + 1, beh);
 					int xp = xmin + rand() % (xmax - xmin);
 					int yp = ymin + rand() % (ymax - ymin);
-
 					improve_guess(a, b, ax, ay, xbest,
 						      ybest, dbest, xp, yp,
 						      patch_w);
 				}
 
-				ann->at < int >(ax, ay) =
+				ann->at < int >(ay, ax) =
 				    XY_TO_INT(xbest, ybest);
-				annd->at < int >(ax, ay) = dbest;
+				annd->at < int >(ay, ax) = dbest;
 			}
 		}
 	}
@@ -231,13 +230,13 @@ void patchmatch(cv::Mat * a, cv::Mat * b, cv::Mat * ann, cv::Mat * annd)
 	BITMAP *test1 = matToBITMAP(*annd);
 	BITMAP *test2 = matToBITMAP(*ann);
 
-	save_bitmap(test1, "annd_matToBITMAP_Mode2.jpg");
-	save_bitmap(test2, "ann_matToBITMAP_Mode2.jpg");
+	save_bitmap(test1, "annd_matToBitmap_MODE2.jpg");
+	save_bitmap(test2, "ann_matToBitmap_MODE2.jpg");
 	delete test1;
 	delete test2;
 
-	cv::imwrite("ann_mat_opencv_Mode2.png", *ann);
-	cv::imwrite("annd_mat_opencv_Mode2.png", *annd);
+	//cv::imwrite("ann.png", *ann);
+	cv::imwrite("annd_mat_opencv_MODE2.png", *annd);
 }
 
 /*
@@ -253,8 +252,8 @@ void patchmatch(cv::Mat * a, cv::Mat * b, cv::Mat * ann, cv::Mat * annd)
 void patchmatch_brent(cv::Mat * a, cv::Mat * b, cv::Mat * ann, cv::Mat * annd)
 {
 	/* Initialize with random nearest neighbor field (NNF). */
-	ann = new cv::Mat_ < int >(a->cols, a->rows);
-	annd = new cv::Mat_ < int >(a->cols, a->rows);
+	ann = new cv::Mat_ < int >(a->rows, a->cols);
+	annd = new cv::Mat_ < int >(a->rows, a->cols);
 
 	int aew = a->cols - patch_w + 1, aeh = a->rows - patch_w + 1;	/* Effective width and height (possible upper left corners of patches). */
 	int bew = b->cols - patch_w + 1, beh = b->rows - patch_w + 1;
@@ -330,9 +329,9 @@ void patchmatch_brent(cv::Mat * a, cv::Mat * b, cv::Mat * ann, cv::Mat * annd)
 						      xp, yp);
 				}
 
-				ann->at < int >(ax, ay) =
+				ann->at < int >(ay, ax) =
 				    XY_TO_INT(xbest, ybest);
-				annd->at < int >(ax, ay) = dbest;
+				annd->at < int >(ay, ax) = dbest;
 			}
 		}
 	}
@@ -340,13 +339,13 @@ void patchmatch_brent(cv::Mat * a, cv::Mat * b, cv::Mat * ann, cv::Mat * annd)
 	BITMAP *test1 = matToBITMAP(*annd);
 	BITMAP *test2 = matToBITMAP(*ann);
 
-	save_bitmap(test1, "results/annd_matToBITMAP_Mode3.jpg");
-	save_bitmap(test2, "results/ann_matToBITMAP_Mode3.jpg");
+	save_bitmap(test1, "results/annd_matToBitmap_MODE3.jpg");
+	save_bitmap(test2, "results/ann_matToBitmap_MODE3.jpg");
 	delete test1;
 	delete test2;
 
-	cv::imwrite("results/ann_mat_opencv_Mode3.jpg", *ann);
-	cv::imwrite("results/annd_mat_opencv_Mode3.jpg", *annd);
+	//cv::imwrite("ann.png", *ann);
+	cv::imwrite("results/annd_mat_opencv_MODE3.png", *annd);
 }
 
 /*
@@ -495,9 +494,9 @@ patchmatch(cv::Mat * a, cv::Mat * b, cv::Mat * ann, cv::Mat * annd,
 				//kNN[xend * yend].dx[0] = xbest;
 				//kNN[xend * yend].dy[0] = ybest;
 
-				ann->at < int >(ax, ay) =
+				ann->at < int >(ay, ax) =
 				    XY_TO_INT(xbest, ybest);
-				annd->at < int >(ax, ay) = dbest;
+				annd->at < int >(ay, ax) = dbest;
 
 				if (guess_ok) {
 					inserer_fin(ax, ay, kxbest, kybest,

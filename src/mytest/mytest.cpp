@@ -23,7 +23,6 @@ int main(){
 
 	BITMAP * im1 =  load_bitmap("t1.png");
 	BITMAP * im2 = load_bitmap("t2.png");
-std::cout << "bonjour1"<<std::endl;
 	cv::Mat mat1 ;
 	mat1 = BITMAPToMat(im1);
 	cv::Mat  mat2 ;
@@ -31,9 +30,9 @@ std::cout << "bonjour1"<<std::endl;
 
 	cv::Mat * ann;
 	cv::Mat * annd;
-	std::cout << "bonjour1"<<std::endl;
+	
+	//patchmatch(im1,im2,ann,annd);
 	patchmatch(&mat1,&mat2,ann,annd);
-std::cout << "bonjour2"<<std::endl;
 
 
 
